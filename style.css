@@ -71,3 +71,12 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+.bullet {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background-color: #ff4444;
+    box-shadow: 0 0 10px #ff4444;
+    animation: pulse 0.5s infinite alternate;
+}
