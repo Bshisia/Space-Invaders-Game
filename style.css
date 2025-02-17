@@ -80,3 +80,13 @@ body {
     box-shadow: 0 0 10px #ff4444;
     animation: pulse 0.5s infinite alternate;
 }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
