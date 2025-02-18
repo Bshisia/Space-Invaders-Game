@@ -9,6 +9,8 @@ let enemyRows = 3;
 let enemyColumns = 8;
 let enemyWidth = 50;
 let enemyHeight = 70;
+let enemySpeed = 1;
+let enemyDirection = 1;
 
 function initializeGame() {
     while (gameContainer.firstChild) {
@@ -39,7 +41,7 @@ function initializeGame() {
 }
 
 function initializeEnemies() {
-    for (let row = 0; row < enemyRows; rows++) {
+    for (let row = 0; row < enemyRows; row++) {
         for (let col = 0; col < enemyColumns; col++) {
             const enemy = document.createElement("div");
             enemy.className = "enemy";
@@ -58,4 +60,40 @@ function initializeEnemies() {
     }
 }
 
+function gameLoop() {
+    updateEnemies();
+    requestAnimationFrame(gameLoop); 
+}
+
+// Update enemies
+function updateEnemies() {
+    let edgeReached = false;
+    enemies.forEach((enemy) => {
+      if (enemy.alive) {
+        enemy.x += enemySpeed * enemyDirection;
+        enemy.element.style.left = `${enemy.x}px`;
+
+        // Check if enemies reach the edge
+        if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+          edgeReached = true;
+        }
+
+        // Check if enemy reaches the player's level
+        if (enemy.y + enemy.height >= player.y) {
+          gameOver = true;
+        }
+      }
+    });
+
+    if (edgeReached) {
+        enemyDirection += -1;
+        enemies.forEach((enemy) => {
+            enemy.y += enemyHeight;
+            enemy.element.style.top = `${enemy.y}px`;
+        });
+    }
+}
+
+
 initializeGame();
+gameLoop();
