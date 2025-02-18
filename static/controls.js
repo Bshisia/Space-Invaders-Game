@@ -10,67 +10,68 @@ document.addEventListener("DOMContentLoaded", () => {
     function startTimer() {
         startTime = Date.now() - elapsedTime * 1000;
         timerInterval = setInterval(updateTimer, 1000);
-      }
+    }
 
-      function updateTimer() {
+    function updateTimer() {
         elapsedTime = Math.floor((Date.now() - startTime) / 1000);
         document.getElementById("timerDisplay").textContent = elapsedTime;
-      }
-  
-      function stopTimer() {
+    }
+
+    function stopTimer() {
         clearInterval(timerInterval);
-      }
-      function pauseGame() {
+    }
+    
+    function pauseGame() {
         isPaused = true;
         pauseMenu.style.display = "block";
         // Stop the timer
         stopTimer();
         // Additional code to pause the game logic, e.g., stop animations, timers, etc.
-      }
-  
-      function resumeGame() {
+    }
+
+    function resumeGame() {
         isPaused = false;
         pauseMenu.style.display = "none";
         // Restart the timer
         startTimer();
         // Additional code to resume the game logic, e.g., restart animations, timers, etc.
         // gameLoop(); // Ensure the game loop continues running
-      }
+    }
 
     // Track key states
     const keys = {
         ArrowLeft: false,
         ArrowRight: false,
         Space: false,
-      };
+    };
 
     // Event listeners for keydown and keyup
     document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") {
-          keys.ArrowLeft = true;
+            keys.ArrowLeft = true;
         } else if (e.key === "ArrowRight") {
-          keys.ArrowRight = true;
+            keys.ArrowRight = true;
         } else if (e.key === " ") {
-          keys.Space = true;
+            keys.Space = true;
         } else if (e.key === "Enter" && gameOver) {
-          // Restart the game when Enter is pressed after game over
-          restartGame();
+            // Restart the game when Enter is pressed after game over
+            restartGame();
         } else if (e.key === "p" || e.key === "P") {
-          if (isPaused) {
-            resumeGame();
-          } else {
-            pauseGame();
-          }
+            if (isPaused) {
+                resumeGame();
+            } else {
+                pauseGame();
+            }
         }
-      });
-  
-      document.addEventListener("keyup", (e) => {
+    });
+
+    document.addEventListener("keyup", (e) => {
         if (e.key === "ArrowLeft") {
-          keys.ArrowLeft = false;
+            keys.ArrowLeft = false;
         } else if (e.key === "ArrowRight") {
-          keys.ArrowRight = false;
+            keys.ArrowRight = false;
         } else if (e.key === " ") {
-          keys.Space = false;
+            keys.Space = false;
         }
-      });
+    });
 })
