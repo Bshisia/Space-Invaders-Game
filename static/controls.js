@@ -1,11 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const pauseMenu = document.getElementById("pauseMenu");
+
+    let isPaused = false;
+
+    let startTime;
+    // let elapsedTime = 0;
+    let timerInterval;
+
+
+      function pauseGame() {
+        isPaused = true;
+        pauseMenu.style.display = "block";
+        // Stop the timer
+        // stopTimer();
+        // Additional code to pause the game logic, e.g., stop animations, timers, etc.
+      }
+  
+      function resumeGame() {
+        isPaused = false;
+        pauseMenu.style.display = "none";
+        // Restart the timer
+        // startTimer();
+        // Additional code to resume the game logic, e.g., restart animations, timers, etc.
+        // gameLoop(); // Ensure the game loop continues running
+      }
+
     // Track key states
     const keys = {
         ArrowLeft: false,
         ArrowRight: false,
         Space: false,
       };
-      
+
     // Event listeners for keydown and keyup
     document.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") {
