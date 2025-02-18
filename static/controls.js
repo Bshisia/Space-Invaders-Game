@@ -4,15 +4,27 @@ document.addEventListener("DOMContentLoaded", () => {
     let isPaused = false;
 
     let startTime;
-    // let elapsedTime = 0;
+    let elapsedTime = 0;
     let timerInterval;
 
+    function startTimer() {
+        startTime = Date.now() - elapsedTime * 1000;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
 
+      function updateTimer() {
+        elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById("timerDisplay").textContent = elapsedTime;
+      }
+  
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
       function pauseGame() {
         isPaused = true;
         pauseMenu.style.display = "block";
         // Stop the timer
-        // stopTimer();
+        stopTimer();
         // Additional code to pause the game logic, e.g., stop animations, timers, etc.
       }
   
@@ -20,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isPaused = false;
         pauseMenu.style.display = "none";
         // Restart the timer
-        // startTimer();
+        startTimer();
         // Additional code to resume the game logic, e.g., restart animations, timers, etc.
         // gameLoop(); // Ensure the game loop continues running
       }
