@@ -33,7 +33,7 @@ body::before {
     z-index: -1;
 }
 
-#game-container {
+#gameContainer {
     position: relative;
     width: 800px;
     height: 600px;
