@@ -183,6 +183,16 @@ function triggerExplosion(x,y) {
     // explosionSound.play();
 }
 
+// checks whether two objects are colliding
+function hasCollided(obj1, obj2) {
+    return (
+        obj1.x < obj2.x + obj2.width &&
+        obj1.x + obj1.width > obj2.x &&
+        obj1.y < obj2.y + obj2.height &&
+        obj1.y + obj1.height > obj2.y
+    );
+}
+
 function checkPlayerBulletCollisions() {
     bullets.forEach((bullet, bulletIndex) => {
         enemies.forEach((enemy, enemyIndex) => {
@@ -232,6 +242,7 @@ function gameLoop() {
     updateBullets();
     updateBulletColors();
     updateEnemyBullets();
+    checkPlayerBulletCollisions();
 
     if (Date.now() - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
