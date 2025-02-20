@@ -83,6 +83,56 @@ function movePlayer() {
     player.element.style.left = `${player.x}px`;
 }
 
+// Player shooting
+bullets = [];
+enemyBullets = [];
+
+function playerShoot() {
+    const currentTime = Date.now();
+    if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
+        const bullet = document.createElement("div");
+        bullet.className = "bullet";
+        bullet.style.left = `${player.x + player.width / 2 -2.5}px`;
+        bullet.style.top = `${player.y - 10}px`;
+        gameContainer.appendChild(bullet);
+    
+        bullets.push({
+            element: bullet,
+            x: player.x + player.width / 2 - 2.5,
+            y: player.y - 10,
+            width: 5,
+            height: 10,
+            speed: 10,
+        });
+        lastShotTime = currentTime;
+        // shootSound.play();
+    }
+}
+
+    // Update player bullets
+    function updateBullets() {
+        bullets.forEach((bullet, index) => {
+          bullet.y -= bullet.speed;
+          bullet.element.style.top = `${bullet.y}px`;
+  
+          // Remove bullet if it goes off-screen
+          if (bullet.y + bullet.height < 0) {
+            bullet.element.remove();
+            bullets.splice(index, 1);
+          }
+        });
+      }
+
+ // Update bullet colors
+ function updateBulletColors() {
+    bullets.forEach((bullet) => {
+      bullet.element.style.backgroundColor = "red"; // Player bullet color
+    });
+
+    enemyBullets.forEach((bullet) => {
+      bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
+    });
+  }
 
 
 // function moveShooter(e) {
