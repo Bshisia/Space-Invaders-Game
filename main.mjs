@@ -155,9 +155,9 @@ function playerShoot() {
 function gameLoop() {
     updateEnemies();
     movePlayer();
-    // playerShoot();
-    // updateBullets();
-    // updateBulletColors();
+    playerShoot();
+    updateBullets();
+    updateBulletColors();
     // document.addEventListener("keydown", moveShooter);
     requestAnimationFrame(gameLoop);
 }
