@@ -169,6 +169,45 @@ function updateEnemyBullets() {
     })
 }
 
+function triggerExplosion(x,y) {
+    const existingExplosion = document.querySelector(".explosion");
+    if (existingExplosion) {
+        existingExplosion.remove();
+    }
+    const explosion = document.createElement("div");
+    explosion.className = "explosion";
+    explosion.style.left = `${x}px`;
+    explosion.style.top = `${y}px`;
+    gameContainer.appendChild(explosion);
+    setTimeout(() => explosion.remove());
+    // explosionSound.play();
+}
+
+function checkPlayerBulletCollisions() {
+    bullets.forEach((bullet, bulletIndex) => {
+        enemies.forEach((enemy, enemyIndex) => {
+            if (
+                enemy.alive &&
+                bullet.x < enemy.x + enemy.width &&
+                bullet.y < enemy.y + enemy.height &&
+                bullet.y > enemy.y + enemy.height &&
+                bullet.y + bullet.height > enemy.y
+            ) {
+                triggerExplosion(enemy.x, enemy.y);
+                enemy.alive = false;
+                enemy.element.remove();
+                bullets.splice(bulletIndex, 1);
+
+                score += 50;
+
+                if (enemies.every((enemy) => !enemy.alive)) {
+                    // levelUp();
+                }
+            }
+        });
+    })
+}
+
 // function moveShooter(e) {
 //     console.log('moveShooter')
 //     switch (e.key) {
@@ -197,9 +236,9 @@ function gameLoop() {
     if (Date.now() - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
         if (aliveEnemies.length > 0) {
-          const randomEnemy = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
-          shootEnemyBullet(randomEnemy);
-          lastEnemyShootTime = Date.now();
+            const randomEnemy = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+            shootEnemyBullet(randomEnemy);
+            lastEnemyShootTime = Date.now();
         }
 
     }
