@@ -1,6 +1,7 @@
 "use strict";
 
 const gameContainer = document.getElementById("gameContainer");
+const pauseMenu = document.getElementById("pauseMenu");
 
 // Game variables
 let player;
@@ -11,6 +12,17 @@ let enemyWidth = 50;
 let enemyHeight = 70;
 let enemySpeed = 1;
 let enemyDirection = 1;
+let bullets;
+let enemyBullets;
+let lastShotTime = 0;
+const shotCooldown = 500;
+
+// Track key states
+const keys = {
+    ArrowLeft: false,
+    ArrowRight: false,
+    Space: false,
+};
 
 function initializeGame() {
     while (gameContainer.firstChild) {
@@ -60,29 +72,53 @@ function initializeEnemies() {
     }
 }
 
+
+
+// function moveShooter(e) {
+//     console.log('moveShooter')
+//     switch (e.key) {
+//         case "ArrowLeft":
+//             if (player.x > 0) {
+//                 player.x = Math.max(0, player.x - player.speed);
+//             }
+//             break
+//         case "ArrowRight":
+//             if (player.x + player.width < gameContainer.clientWidth) {
+//                 player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
+//             }
+//             break
+//     }
+//     player.element.style.left = `${player.x}px`;
+// }
+
 function gameLoop() {
     updateEnemies();
-    requestAnimationFrame(gameLoop); 
+    // movePlayer();
+    // playerShoot();
+    // updateBullets();
+    // updateBulletColors();
+    // document.addEventListener("keydown", moveShooter);
+    requestAnimationFrame(gameLoop);
 }
 
 // Update enemies
 function updateEnemies() {
     let edgeReached = false;
     enemies.forEach((enemy) => {
-      if (enemy.alive) {
-        enemy.x += enemySpeed * enemyDirection;
-        enemy.element.style.left = `${enemy.x}px`;
+        if (enemy.alive) {
+            enemy.x += enemySpeed * enemyDirection;
+            enemy.element.style.left = `${enemy.x}px`;
 
-        // Check if enemies reach the edge
-        if (enemy.x + enemy.width > 800 || enemy.x < 0) {
-          edgeReached = true;
-        }
+            // Check if enemies reach the edge
+            if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+                edgeReached = true;
+            }
 
-        // Check if enemy reaches the player's level
-        if (enemy.y + enemy.height >= player.y) {
-          gameOver = true;
+            // Check if enemy reaches the player's level
+            if (enemy.y + enemy.height >= player.y) {
+                gameOver = true;
+            }
         }
-      }
     });
 
     if (edgeReached) {
@@ -93,6 +129,73 @@ function updateEnemies() {
         });
     }
 }
+
+let isPaused = false;
+
+let startTime;
+let elapsedTime = 0;
+let timerInterval;
+
+function startTimer() {
+    startTime = Date.now() - elapsedTime * 1000;
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+    elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById("timerDisplay").textContent = elapsedTime;
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
+
+function pauseGame() {
+    isPaused = true;
+    pauseMenu.style.display = "block";
+    // Stop the timer
+    stopTimer();
+}
+
+function resumeGame() {
+    isPaused = false;
+    pauseMenu.style.display = "none";
+    // Restart the timer
+    startTimer();
+    gameLoop();
+}
+
+
+// Event listeners for keydown and keyup
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+        keys.ArrowLeft = true;
+    } else if (e.key === "ArrowRight") {
+        keys.ArrowRight = true;
+    } else if (e.key === " ") {
+        keys.Space = true;
+    }
+    // } else if (e.key === "Enter" && gameOver) {
+    //     // Restart the game when Enter is pressed after game over
+    //     restartGame();
+    // } else if (e.key === "p" || e.key === "P") {
+    //     if (isPaused) {
+    //         resumeGame();
+    //     } else {
+    //         pauseGame();
+    //     }
+    // }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowLeft") {
+        keys.ArrowLeft = false;
+    } else if (e.key === "ArrowRight") {
+        keys.ArrowRight = false;
+    } else if (e.key === " ") {
+        keys.Space = false;
+    }
+});
 
 
 initializeGame();
