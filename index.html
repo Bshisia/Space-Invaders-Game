@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div id="game-container">
+    <div id="gameContainer">
         <div id="player"></div>
         <!-- enemies -->
     </div>
     <div id="sidebar">
-        <h2>Level: <span id="levels">1</span></h2>
-        <h2>Score: <span id="scores">0</span></h2>
-        <h2>Lives: <span id="lives">3</span></h2>
-        <h2>Time: <span id="timer">0</span>s</h2>
+        <h2>Level: <span id="levelDisplay">1</span></h2>
+        <h2>Score: <span id="scoreDisplay">0</span></h2>
+        <h2>Lives: <span id="livesDisplay">3</span></h2>
+        <h2>Time: <span id="timerDisplay">0</span>s</h2>
         <h3>Controls:</h3>
         <p>␣ : shoot</p>
         <p>← : move left</p>
@@ -24,5 +24,6 @@
         <p>c : continue</p>
         <p>r : restart</p>
     </div>
+    <script type="module" src="main.mjs"></script>
 </body>
 </html>
