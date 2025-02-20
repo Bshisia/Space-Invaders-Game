@@ -72,6 +72,17 @@ function initializeEnemies() {
     }
 }
 
+// Move player
+function movePlayer() {
+    if (keys.ArrowLeft && player.x > 0) {
+        player.x = Math.max(0, player.x - player.speed);
+    }
+    if (keys.ArrowRight && player.x + player.width < gameContainer.clientWidth) {
+        player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
+    }
+    player.element.style.left = `${player.x}px`;
+}
+
 
 
 // function moveShooter(e) {
@@ -93,7 +104,7 @@ function initializeEnemies() {
 
 function gameLoop() {
     updateEnemies();
-    // movePlayer();
+    movePlayer();
     // playerShoot();
     // updateBullets();
     // updateBulletColors();
