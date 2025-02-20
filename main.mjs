@@ -14,8 +14,11 @@ let enemySpeed = 1;
 let enemyDirection = 1;
 let bullets;
 let enemyBullets;
+let gameOver = false;
 let lastShotTime = 0;
-const shotCooldown = 500;
+let lastEnemyShootTime = 0;
+let enemyShootInterval = 1000;
+const shotCooldown = 300;
 
 // Track key states
 const keys = {
@@ -92,10 +95,10 @@ function playerShoot() {
     if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
         const bullet = document.createElement("div");
         bullet.className = "bullet";
-        bullet.style.left = `${player.x + player.width / 2 -2.5}px`;
+        bullet.style.left = `${player.x + player.width / 2 - 2.5}px`;
         bullet.style.top = `${player.y - 10}px`;
         gameContainer.appendChild(bullet);
-    
+
         bullets.push({
             element: bullet,
             x: player.x + player.width / 2 - 2.5,
@@ -109,31 +112,62 @@ function playerShoot() {
     }
 }
 
-    // Update player bullets
-    function updateBullets() {
-        bullets.forEach((bullet, index) => {
-          bullet.y -= bullet.speed;
-          bullet.element.style.top = `${bullet.y}px`;
-  
-          // Remove bullet if it goes off-screen
-          if (bullet.y + bullet.height < 0) {
+// Update player bullets
+function updateBullets() {
+    bullets.forEach((bullet, index) => {
+        bullet.y -= bullet.speed;
+        bullet.element.style.top = `${bullet.y}px`;
+
+        // Remove bullet if it goes off-screen
+        if (bullet.y + bullet.height < 0) {
             bullet.element.remove();
             bullets.splice(index, 1);
-          }
-        });
-      }
+        }
+    });
+}
 
- // Update bullet colors
- function updateBulletColors() {
+// Update bullet colors
+function updateBulletColors() {
     bullets.forEach((bullet) => {
-      bullet.element.style.backgroundColor = "red"; // Player bullet color
+        bullet.element.style.backgroundColor = "red"; // Player bullet color
     });
 
     enemyBullets.forEach((bullet) => {
-      bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
+        bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
     });
-  }
+}
 
+// Shoot enemy bullets
+function shootEnemyBullet(enemy) {
+    const enemyBullet = document.createElement("div");
+    enemyBullet.className = "bullet";
+    enemyBullet.style.left = `${enemy.x + enemy.width / 2 - 2.5}px`;
+    enemyBullet.style.top = `${enemy.y + enemy.height}px`;
+    gameContainer.appendChild(enemyBullet);
+    enemyBullets.push({
+        element: enemyBullet,
+        x: enemy.x + enemy.width / 2 - 2.5,
+        y: enemy.y + enemy.height,
+        width: 5,
+        height: 10,
+        speed: 5,
+    });
+}
+
+
+// Enemy bullets
+function updateEnemyBullets() {
+    enemyBullets.forEach((enemyBullet, index) => {
+        enemyBullet.y += enemyBullet.speed
+        enemyBullet.element.style.top = `${enemyBullet.y}px`;
+
+        // Remove bullet if it goes off-screen
+        if (enemyBullet.y > 600) {
+            enemyBullet.element.remove();
+            enemyBullets.splice(index, 1);
+        }
+    })
+}
 
 // function moveShooter(e) {
 //     console.log('moveShooter')
@@ -158,6 +192,17 @@ function gameLoop() {
     playerShoot();
     updateBullets();
     updateBulletColors();
+    updateEnemyBullets();
+
+    if (Date.now() - lastEnemyShootTime > enemyShootInterval) {
+        const aliveEnemies = enemies.filter((enemy) => enemy.alive);
+        if (aliveEnemies.length > 0) {
+          const randomEnemy = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+          shootEnemyBullet(randomEnemy);
+          lastEnemyShootTime = Date.now();
+        }
+
+    }
     // document.addEventListener("keydown", moveShooter);
     requestAnimationFrame(gameLoop);
 }
