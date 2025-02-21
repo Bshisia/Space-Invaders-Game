@@ -2,9 +2,16 @@
 
 const gameContainer = document.getElementById("gameContainer");
 const pauseMenu = document.getElementById("pauseMenu");
+const levelDisplay = document.getElementById("levelDisplay");
+const scoreDisplay = document.getElementById("scoreDisplay");
+const livesDisplay = document.getElementById("livesDisplay");
+
 
 // Game variables
 let player;
+let score = 0;
+let lives = 3;
+let level = 1;
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
@@ -169,7 +176,7 @@ function updateEnemyBullets() {
     })
 }
 
-function triggerExplosion(x,y) {
+function triggerExplosion(x, y) {
     const existingExplosion = document.querySelector(".explosion");
     if (existingExplosion) {
         existingExplosion.remove();
@@ -182,6 +189,14 @@ function triggerExplosion(x,y) {
     setTimeout(() => explosion.remove());
     // explosionSound.play();
 }
+
+ // Update the sidebar
+ function updateSidebar() {
+    levelDisplay.textContent = level;
+    scoreDisplay.textContent = score;
+    livesDisplay.textContent = lives;
+  }
+
 
 // checks whether two objects are colliding
 function hasCollided(obj1, obj2) {
@@ -197,16 +212,13 @@ function checkPlayerBulletCollisions() {
     bullets.forEach((bullet, bulletIndex) => {
         enemies.forEach((enemy, enemyIndex) => {
             if (
-                enemy.alive &&
-                bullet.x < enemy.x + enemy.width &&
-                bullet.y < enemy.y + enemy.height &&
-                bullet.y > enemy.y + enemy.height &&
-                bullet.y + bullet.height > enemy.y
+                enemy.alive && hasCollided(bullet, enemy)
             ) {
-                triggerExplosion(enemy.x, enemy.y);
+                // triggerExplosion(enemy.x, enemy.y);
                 enemy.alive = false;
                 enemy.element.remove();
                 bullets.splice(bulletIndex, 1);
+                bullet.element.remove();
 
                 score += 50;
 
@@ -220,22 +232,20 @@ function checkPlayerBulletCollisions() {
 
 // function moveShooter(e) {
 //     console.log('moveShooter')
-//     switch (e.key) {
-//         case "ArrowLeft":
-//             if (player.x > 0) {
-//                 player.x = Math.max(0, player.x - player.speed);
-//             }
-//             break
-//         case "ArrowRight":
-//             if (player.x + player.width < gameContainer.clientWidth) {
-//                 player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
-//             }
-//             break
+
+//     if (e.key === "ArrowLeft" && player.x > 0) {
+//         player.x = Math.max(0, player.x - player.speed);
+//     } else if (
+//         e.key === "ArrowRight" &&
+//         player.x + player.width < gameContainer.clientWidth
+//     ) {
+//         player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
 //     }
 //     player.element.style.left = `${player.x}px`;
 // }
 
 function gameLoop() {
+    // document.addEventListener("keydown", moveShooter);
     updateEnemies();
     movePlayer();
     playerShoot();
@@ -243,17 +253,16 @@ function gameLoop() {
     updateBulletColors();
     updateEnemyBullets();
     checkPlayerBulletCollisions();
-
-    if (Date.now() - lastEnemyShootTime > enemyShootInterval) {
+    const now = Date.now();
+    if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
         if (aliveEnemies.length > 0) {
             const randomEnemy = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
             shootEnemyBullet(randomEnemy);
-            lastEnemyShootTime = Date.now();
+            lastEnemyShootTime = now;
         }
 
     }
-    // document.addEventListener("keydown", moveShooter);
     requestAnimationFrame(gameLoop);
 }
 
