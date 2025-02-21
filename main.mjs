@@ -249,8 +249,20 @@ function checkEnemyBulletCollisions() {
             lives--;
             updateSidebar();
 
+            // End game if no lives left
+            if (lives === 0) {
+                gameOver = true;
+            } else {
+                // Reset player position if lives remain
+                player.alive = true;
+                player.element = document.createElement("div");
+                player.element.id = "player"
+                player.element.className = "player";
+                player.element.style.backgroundImage = "url('player.png')";
+                gameContainer.appendChild(player.element);
+            }
         }
-    })
+    });
 }
 
 // function moveShooter(e) {
