@@ -258,7 +258,7 @@ function checkEnemyBulletCollisions() {
                 player.element = document.createElement("div");
                 player.element.id = "player"
                 player.element.className = "player";
-                player.element.style.backgroundImage = "url('player.png')";
+                player.element.style.backgroundImage = "url('images/player.png')";
                 gameContainer.appendChild(player.element);
             }
         }
