@@ -235,12 +235,20 @@ function checkEnemyBulletCollisions() {
         if (
             hasCollided(bullet, player)
         ) {
+            // Player hit!
             player.alive = false;
 
+            // Remove the player's image
             player.element.remove();
 
+            // Remove the enemy bullet
             enemyBullets.splice(bulletIndex, 1);
             bullet.element.remove();
+
+            // Decrease lives
+            lives--;
+            updateSidebar();
+
         }
     })
 }
