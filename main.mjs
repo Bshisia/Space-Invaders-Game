@@ -230,6 +230,21 @@ function checkPlayerBulletCollisions() {
     })
 }
 
+function checkEnemyBulletCollisions() {
+    enemyBullets.forEach((bullet, bulletIndex) => {
+        if (
+            hasCollided(bullet, player)
+        ) {
+            player.alive = false;
+
+            player.element.remove();
+
+            enemyBullets.splice(bulletIndex, 1);
+            bullet.element.remove();
+        }
+    })
+}
+
 // function moveShooter(e) {
 //     console.log('moveShooter')
 
@@ -253,6 +268,7 @@ function gameLoop() {
     updateBulletColors();
     updateEnemyBullets();
     checkPlayerBulletCollisions();
+    checkEnemyBulletCollisions();
     const now = Date.now();
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
