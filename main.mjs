@@ -59,7 +59,15 @@ function initializeGame() {
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
 
+    bullets = [];
+    enemyBullets = [];
     enemies = [];
+    gameOver = false;
+    level = 1;
+    score = 0;
+    lives = 3;
+    enemyShootInterval = 1000; // Reset enemy shooting interval
+    enemySpeed = 1; // Reset enemy speed to initial value   
 
     initializeEnemies();
 }
