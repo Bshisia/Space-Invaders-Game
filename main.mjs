@@ -9,22 +9,22 @@ const livesDisplay = document.getElementById("livesDisplay");
 
 // Game variables
 let player;
-let score = 0;
-let lives = 3;
-let level = 1;
+let score = 0; // Track the player's score
+let lives = 3; // Track the player's lives
+let level = 1; // Track the current level
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
 let enemyWidth = 50;
 let enemyHeight = 70;
-let enemySpeed = 1;
+let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
 let enemyBullets;
 let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
-let enemyShootInterval = 1000;
+let enemyShootInterval = 1000; // Initial firing interval
 const shotCooldown = 300;
 
 // Track key states
@@ -34,7 +34,9 @@ const keys = {
     Space: false,
 };
 
+// Initialize the game
 function initializeGame() {
+    // Clear the game container
     while (gameContainer.firstChild) {
         gameContainer.removeChild(gameContainer.firstChild);
     }
@@ -42,8 +44,8 @@ function initializeGame() {
     // Reset game variables
     player = {
         element: document.createElement("div"),
-        x: 375,
-        y: 540,
+        x: 375, // Initial X position (centered)
+        y: 540, // Initial Y position (near the bottom)
         width: 40,
         height: 40,
         speed: 5,
