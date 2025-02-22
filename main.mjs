@@ -5,7 +5,11 @@ const pauseMenu = document.getElementById("pauseMenu");
 const levelDisplay = document.getElementById("levelDisplay");
 const scoreDisplay = document.getElementById("scoreDisplay");
 const livesDisplay = document.getElementById("livesDisplay");
+const continueButton = document.getElementById("continueButton");
+const restartButton = document.getElementById("restartButton");
 
+continueButton.addEventListener("click", resumeGame);
+restartButton.addEventListener("click", restartGame);
 
 // Game variables
 let player;
@@ -80,6 +84,7 @@ function initializeGame() {
     startTimer();
 }
 
+// Initialize enemies
 function initializeEnemies() {
     for (let row = 0; row < enemyRows; row++) {
         for (let col = 0; col < enemyColumns; col++) {
@@ -115,6 +120,7 @@ function movePlayer() {
 bullets = [];
 enemyBullets = [];
 
+// Shoot player bullet
 function playerShoot() {
     const currentTime = Date.now();
     if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
@@ -208,13 +214,37 @@ function triggerExplosion(x, y) {
     // explosionSound.play();
 }
 
- // Update the sidebar
- function updateSidebar() {
+// Update the sidebar
+function updateSidebar() {
+   levelDisplay.textContent = level;
+   scoreDisplay.textContent = score;
+   livesDisplay.textContent = lives;
+}
+
+// Restart the game
+function restartGame() {
+    isPaused = false;
+    pauseMenu.style.display = "none";
+
+    while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+    }
+
+    player = null;
+    bullets = [];
+    enemyBullets = [];
+    gameOver = false;
+    level = 1;
+    score = 0;
+    lives = 3;
+
     levelDisplay.textContent = level;
     scoreDisplay.textContent = score;
     livesDisplay.textContent = lives;
-  }
 
+    initializeGame();
+    gameLoop();
+}
 
 // checks whether two objects are colliding
 function hasCollided(obj1, obj2) {
@@ -299,6 +329,11 @@ function checkEnemyBulletCollisions() {
 
 function gameLoop() {
     // document.addEventListener("keydown", moveShooter);
+
+    if (isPaused) {
+        return;
+    }
+    
     updateEnemies();
     movePlayer();
     playerShoot();
