@@ -69,7 +69,15 @@ function initializeGame() {
     enemyShootInterval = 1000; // Reset enemy shooting interval
     enemySpeed = 1; // Reset enemy speed to initial value   
 
+    // Initialize enemies
     initializeEnemies();
+
+    // Update the sidebar
+    updateSidebar();
+
+    // Start the timer
+    resetTimer();
+    startTimer();
 }
 
 function initializeEnemies() {
@@ -359,6 +367,11 @@ function updateTimer() {
 
 function stopTimer() {
     clearInterval(timerInterval);
+}
+
+function resetTimer() {
+    elapsedTime = 0;
+    document.getElementById("timerDisplay").textContent = 0;
 }
 
 function pauseGame() {
