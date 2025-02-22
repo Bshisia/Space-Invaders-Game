@@ -256,6 +256,27 @@ function hasCollided(obj1, obj2) {
     );
 }
 
+// Check collisions between plyaer bullets and enemy bullets
+function checkBulletCollisions() {
+    bullets.forEach((playerBullet, playerBulletIndex) => {
+        enemyBullets.forEach((enemyBullet, enemyBulletIndex) => {
+            if (
+                hasCollided(playerBullet, enemyBullet)
+            ) {
+                triggerExplosion(
+                    (playerBullet.x + enemyBullet.x) / 2,
+                    (playerBullet.y + enemyBullet.y) / 2
+                );
+
+                playerBullet.element.remove();
+                enemyBullet.element.remove();
+                bullets.splice(playerBulletIndex, 1);
+                enemyBullets.splice(enemyBulletIndex, 1);
+            }
+        });
+    });
+}
+
 function checkPlayerBulletCollisions() {
     bullets.forEach((bullet, bulletIndex) => {
         enemies.forEach((enemy, enemyIndex) => {
@@ -344,14 +365,17 @@ function gameLoop() {
         return;
     }
     
-    updateEnemies();
     movePlayer();
     playerShoot();
     updateBullets();
-    updateBulletColors();
     updateEnemyBullets();
+    updateEnemies();
+    updateBulletColors();
+
     checkPlayerBulletCollisions();
     checkEnemyBulletCollisions();
+    checkBulletCollisions();
+
     const now = Date.now();
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
