@@ -117,8 +117,8 @@ function movePlayer() {
 }
 
 // Player shooting
-bullets = [];
-enemyBullets = [];
+// bullets = [];
+// enemyBullets = [];
 
 // Shoot player bullet
 function playerShoot() {
@@ -328,7 +328,17 @@ function checkEnemyBulletCollisions() {
 // }
 
 function gameLoop() {
-    // document.addEventListener("keydown", moveShooter);
+    if (gameOver) {
+        const gameOverMessage = document.createElement("div");
+        gameOverMessage.textContent = "Game Over! Press Enter to Restart";
+        gameOverMessage.style.color = "#fff";
+        gameOverMessage.style.fontSize = "40px";
+        gameOverMessage.style.textAlign = "center";
+        gameOverMessage.style.marginTop = "50px";
+        gameContainer.appendChild(gameOverMessage);
+        stopTimer();
+        return;
+    }
 
     if (isPaused) {
         return;
@@ -433,17 +443,16 @@ document.addEventListener("keydown", (e) => {
         keys.ArrowRight = true;
     } else if (e.key === " ") {
         keys.Space = true;
+    } else if (e.key === "Enter" && gameOver) {
+        // Restart the game when Enter is pressed after game over
+        restartGame();
+    } else if (e.key === "p" || e.key === "P") {
+        if (isPaused) {
+            resumeGame();
+        } else {
+            pauseGame();
+        }
     }
-    // } else if (e.key === "Enter" && gameOver) {
-    //     // Restart the game when Enter is pressed after game over
-    //     restartGame();
-    // } else if (e.key === "p" || e.key === "P") {
-    //     if (isPaused) {
-    //         resumeGame();
-    //     } else {
-    //         pauseGame();
-    //     }
-    // }
 });
 
 document.addEventListener("keyup", (e) => {
@@ -456,6 +465,6 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-
+// Start the game
 initializeGame();
 gameLoop();
