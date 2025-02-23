@@ -71,7 +71,7 @@ function initializeGame() {
     level = 1;
     score = 0;
     lives = 3;
-    enemyShootInterval = 1000; // Reset enemy shooting interval
+    shotCooldown = initialShotCooldown; 
     enemySpeed = 1; // Reset enemy speed to initial value   
 
     // Initialize enemies
@@ -211,8 +211,7 @@ function triggerExplosion(x, y) {
     explosion.style.left = `${x}px`;
     explosion.style.top = `${y}px`;
     gameContainer.appendChild(explosion);
-    setTimeout(() => explosion.remove());
-    // explosionSound.play();
+    setTimeout(() => explosion.remove(), 500);
 }
 
 // Update the sidebar
@@ -284,7 +283,7 @@ function checkPlayerBulletCollisions() {
             if (
                 enemy.alive && hasCollided(bullet, enemy)
             ) {
-                // triggerExplosion(enemy.x, enemy.y);
+                triggerExplosion(enemy.x, enemy.y);
                 enemy.alive = false;
                 enemy.element.remove();
                 bullets.splice(bulletIndex, 1);
