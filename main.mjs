@@ -5,26 +5,30 @@ const pauseMenu = document.getElementById("pauseMenu");
 const levelDisplay = document.getElementById("levelDisplay");
 const scoreDisplay = document.getElementById("scoreDisplay");
 const livesDisplay = document.getElementById("livesDisplay");
+const continueButton = document.getElementById("continueButton");
+const restartButton = document.getElementById("restartButton");
 
+continueButton.addEventListener("click", resumeGame);
+restartButton.addEventListener("click", restartGame);
 
 // Game variables
 let player;
-let score = 0;
-let lives = 3;
-let level = 1;
+let score = 0; // Track the player's score
+let lives = 3; // Track the player's lives
+let level = 1; // Track the current level
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
 let enemyWidth = 50;
 let enemyHeight = 70;
-let enemySpeed = 1;
+let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
 let enemyBullets;
 let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
-let enemyShootInterval = 1000;
+let enemyShootInterval = 1000; // Initial firing interval
 const shotCooldown = 300;
 
 // Track key states
@@ -34,7 +38,9 @@ const keys = {
     Space: false,
 };
 
+// Initialize the game
 function initializeGame() {
+    // Clear the game container
     while (gameContainer.firstChild) {
         gameContainer.removeChild(gameContainer.firstChild);
     }
@@ -42,8 +48,8 @@ function initializeGame() {
     // Reset game variables
     player = {
         element: document.createElement("div"),
-        x: 375,
-        y: 540,
+        x: 375, // Initial X position (centered)
+        y: 540, // Initial Y position (near the bottom)
         width: 40,
         height: 40,
         speed: 5,
@@ -57,11 +63,28 @@ function initializeGame() {
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
 
+    bullets = [];
+    enemyBullets = [];
     enemies = [];
+    gameOver = false;
+    level = 1;
+    score = 0;
+    lives = 3;
+    enemyShootInterval = 1000; // Reset enemy shooting interval
+    enemySpeed = 1; // Reset enemy speed to initial value   
 
+    // Initialize enemies
     initializeEnemies();
+
+    // Update the sidebar
+    updateSidebar();
+
+    // Start the timer
+    resetTimer();
+    startTimer();
 }
 
+// Initialize enemies
 function initializeEnemies() {
     for (let row = 0; row < enemyRows; row++) {
         for (let col = 0; col < enemyColumns; col++) {
@@ -94,9 +117,10 @@ function movePlayer() {
 }
 
 // Player shooting
-bullets = [];
-enemyBullets = [];
+// bullets = [];
+// enemyBullets = [];
 
+// Shoot player bullet
 function playerShoot() {
     const currentTime = Date.now();
     if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
@@ -190,13 +214,37 @@ function triggerExplosion(x, y) {
     // explosionSound.play();
 }
 
- // Update the sidebar
- function updateSidebar() {
+// Update the sidebar
+function updateSidebar() {
+   levelDisplay.textContent = level;
+   scoreDisplay.textContent = score;
+   livesDisplay.textContent = lives;
+}
+
+// Restart the game
+function restartGame() {
+    isPaused = false;
+    pauseMenu.style.display = "none";
+
+    while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+    }
+
+    player = null;
+    bullets = [];
+    enemyBullets = [];
+    gameOver = false;
+    level = 1;
+    score = 0;
+    lives = 3;
+
     levelDisplay.textContent = level;
     scoreDisplay.textContent = score;
     livesDisplay.textContent = lives;
-  }
 
+    initializeGame();
+    gameLoop();
+}
 
 // checks whether two objects are colliding
 function hasCollided(obj1, obj2) {
@@ -206,6 +254,27 @@ function hasCollided(obj1, obj2) {
         obj1.y < obj2.y + obj2.height &&
         obj1.y + obj1.height > obj2.y
     );
+}
+
+// Check collisions between plyaer bullets and enemy bullets
+function checkBulletCollisions() {
+    bullets.forEach((playerBullet, playerBulletIndex) => {
+        enemyBullets.forEach((enemyBullet, enemyBulletIndex) => {
+            if (
+                hasCollided(playerBullet, enemyBullet)
+            ) {
+                triggerExplosion(
+                    (playerBullet.x + enemyBullet.x) / 2,
+                    (playerBullet.y + enemyBullet.y) / 2
+                );
+
+                playerBullet.element.remove();
+                enemyBullet.element.remove();
+                bullets.splice(playerBulletIndex, 1);
+                enemyBullets.splice(enemyBulletIndex, 1);
+            }
+        });
+    });
 }
 
 function checkPlayerBulletCollisions() {
@@ -230,6 +299,41 @@ function checkPlayerBulletCollisions() {
     })
 }
 
+function checkEnemyBulletCollisions() {
+    enemyBullets.forEach((bullet, bulletIndex) => {
+        if (
+            hasCollided(bullet, player)
+        ) {
+            // Player hit!
+            player.alive = false;
+
+            // Remove the player's image
+            player.element.remove();
+
+            // Remove the enemy bullet
+            enemyBullets.splice(bulletIndex, 1);
+            bullet.element.remove();
+
+            // Decrease lives
+            lives--;
+            updateSidebar();
+
+            // End game if no lives left
+            if (lives === 0) {
+                gameOver = true;
+            } else {
+                // Reset player position if lives remain
+                player.alive = true;
+                player.element = document.createElement("div");
+                player.element.id = "player"
+                player.element.className = "player";
+                player.element.style.backgroundImage = "url('images/player.png')";
+                gameContainer.appendChild(player.element);
+            }
+        }
+    });
+}
+
 // function moveShooter(e) {
 //     console.log('moveShooter')
 
@@ -245,14 +349,33 @@ function checkPlayerBulletCollisions() {
 // }
 
 function gameLoop() {
-    // document.addEventListener("keydown", moveShooter);
-    updateEnemies();
+    if (gameOver) {
+        const gameOverMessage = document.createElement("div");
+        gameOverMessage.textContent = "Game Over! Press Enter to Restart";
+        gameOverMessage.style.color = "#fff";
+        gameOverMessage.style.fontSize = "40px";
+        gameOverMessage.style.textAlign = "center";
+        gameOverMessage.style.marginTop = "50px";
+        gameContainer.appendChild(gameOverMessage);
+        stopTimer();
+        return;
+    }
+
+    if (isPaused) {
+        return;
+    }
+    
     movePlayer();
     playerShoot();
     updateBullets();
-    updateBulletColors();
     updateEnemyBullets();
+    updateEnemies();
+    updateBulletColors();
+
     checkPlayerBulletCollisions();
+    checkEnemyBulletCollisions();
+    checkBulletCollisions();
+
     const now = Date.now();
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
@@ -315,6 +438,11 @@ function stopTimer() {
     clearInterval(timerInterval);
 }
 
+function resetTimer() {
+    elapsedTime = 0;
+    document.getElementById("timerDisplay").textContent = 0;
+}
+
 function pauseGame() {
     isPaused = true;
     pauseMenu.style.display = "block";
@@ -339,17 +467,16 @@ document.addEventListener("keydown", (e) => {
         keys.ArrowRight = true;
     } else if (e.key === " ") {
         keys.Space = true;
+    } else if (e.key === "Enter" && gameOver) {
+        // Restart the game when Enter is pressed after game over
+        restartGame();
+    } else if (e.key === "p" || e.key === "P") {
+        if (isPaused) {
+            resumeGame();
+        } else {
+            pauseGame();
+        }
     }
-    // } else if (e.key === "Enter" && gameOver) {
-    //     // Restart the game when Enter is pressed after game over
-    //     restartGame();
-    // } else if (e.key === "p" || e.key === "P") {
-    //     if (isPaused) {
-    //         resumeGame();
-    //     } else {
-    //         pauseGame();
-    //     }
-    // }
 });
 
 document.addEventListener("keyup", (e) => {
@@ -362,6 +489,6 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-
+// Start the game
 initializeGame();
 gameLoop();
