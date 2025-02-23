@@ -19,8 +19,8 @@ let level = 1; // Track the current level
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
-let enemyWidth = 50;
-let enemyHeight = 70;
+let enemyWidth = 38;
+let enemyHeight = 60;
 let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
@@ -29,7 +29,8 @@ let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
 let enemyShootInterval = 1000; // Initial firing interval
-const shotCooldown = 300;
+const initialShotCooldown = 500;
+let shotCooldown = initialShotCooldown
 
 // Track key states
 const keys = {
@@ -292,11 +293,22 @@ function checkPlayerBulletCollisions() {
                 score += 50;
 
                 if (enemies.every((enemy) => !enemy.alive)) {
-                    // levelUp();
+                    levelUp();
                 }
             }
         });
     })
+}
+
+// Level up
+function levelUp() {
+  level++;
+  enemyShootInterval = Math.max(200, enemyShootInterval - 100);
+  enemySpeed += 0.5; // Increase enemy speed
+  shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
+
+  initializeEnemies();
+  updateSidebar();
 }
 
 function checkEnemyBulletCollisions() {
