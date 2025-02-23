@@ -444,7 +444,6 @@ function resetTimer() {
 function pauseGame() {
     isPaused = true;
     pauseMenu.style.display = "block";
-    // Stop the timer
     stopTimer();
 }
 
@@ -474,6 +473,8 @@ document.addEventListener("keydown", (e) => {
         } else {
             pauseGame();
         }
+    } else if (e.key === "r" || e.key === "R") {
+        restartGame();
     }
 });
 
