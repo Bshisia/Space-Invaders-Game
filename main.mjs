@@ -473,7 +473,7 @@ document.addEventListener("keydown", (e) => {
         } else {
             pauseGame();
         }
-    } else if (e.key === "r" || e.key === "R") {
+    } else if ((e.key === "r" || e.key === "R") && isPaused) {
         restartGame();
     }
 });
