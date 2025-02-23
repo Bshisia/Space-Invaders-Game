@@ -391,31 +391,29 @@ function gameLoop() {
 
 // Update enemies
 function updateEnemies() {
-    let edgeReached = false;
-    enemies.forEach((enemy) => {
-        if (enemy.alive) {
-            enemy.x += enemySpeed * enemyDirection;
-            enemy.element.style.left = `${enemy.x}px`;
+  let edgeReached = false;
+  enemies.forEach((enemy) => {
+    if (enemy.alive) {
+      enemy.x += enemySpeed * enemyDirection;
+      enemy.element.style.left = `${enemy.x}px`;
 
-            // Check if enemies reach the edge
-            if (enemy.x + enemy.width > 800 || enemy.x < 0) {
-                edgeReached = true;
-            }
+      if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+        edgeReached = true;
+      }
 
-            // Check if enemy reaches the player's level
-            if (enemy.y + enemy.height >= player.y) {
-                gameOver = true;
-            }
-        }
-    });
-
-    if (edgeReached) {
-        enemyDirection += -1;
-        enemies.forEach((enemy) => {
-            enemy.y += enemyHeight;
-            enemy.element.style.top = `${enemy.y}px`;
-        });
+      if (enemy.y + enemy.height >= player.y) {
+        gameOver = true;
+      }
     }
+  });
+
+  if (edgeReached) {
+    enemyDirection *= -1;
+    enemies.forEach((enemy) => {
+      enemy.y += enemyHeight;
+      enemy.element.style.top = `${enemy.y}px`;
+    });
+  }
 }
 
 let isPaused = false;
