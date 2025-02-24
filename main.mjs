@@ -19,8 +19,8 @@ let level = 1; // Track the current level
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
-let enemyWidth = 50;
-let enemyHeight = 70;
+let enemyWidth = 38;
+let enemyHeight = 60;
 let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
@@ -29,7 +29,8 @@ let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
 let enemyShootInterval = 1000; // Initial firing interval
-const shotCooldown = 300;
+const initialShotCooldown = 500;
+let shotCooldown = initialShotCooldown
 
 // Track key states
 const keys = {
@@ -70,7 +71,7 @@ function initializeGame() {
     level = 1;
     score = 0;
     lives = 3;
-    enemyShootInterval = 1000; // Reset enemy shooting interval
+    shotCooldown = initialShotCooldown; 
     enemySpeed = 1; // Reset enemy speed to initial value   
 
     // Initialize enemies
@@ -210,8 +211,7 @@ function triggerExplosion(x, y) {
     explosion.style.left = `${x}px`;
     explosion.style.top = `${y}px`;
     gameContainer.appendChild(explosion);
-    setTimeout(() => explosion.remove());
-    // explosionSound.play();
+    setTimeout(() => explosion.remove(), 500);
 }
 
 // Update the sidebar
@@ -283,7 +283,7 @@ function checkPlayerBulletCollisions() {
             if (
                 enemy.alive && hasCollided(bullet, enemy)
             ) {
-                // triggerExplosion(enemy.x, enemy.y);
+                triggerExplosion(enemy.x, enemy.y);
                 enemy.alive = false;
                 enemy.element.remove();
                 bullets.splice(bulletIndex, 1);
@@ -292,11 +292,22 @@ function checkPlayerBulletCollisions() {
                 score += 50;
 
                 if (enemies.every((enemy) => !enemy.alive)) {
-                    // levelUp();
+                    levelUp();
                 }
             }
         });
     })
+}
+
+// Level up
+function levelUp() {
+  level++;
+  enemyShootInterval = Math.max(200, enemyShootInterval - 100);
+  enemySpeed += 0.5; // Increase enemy speed
+  shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
+
+  initializeEnemies();
+  updateSidebar();
 }
 
 function checkEnemyBulletCollisions() {
@@ -391,31 +402,29 @@ function gameLoop() {
 
 // Update enemies
 function updateEnemies() {
-    let edgeReached = false;
-    enemies.forEach((enemy) => {
-        if (enemy.alive) {
-            enemy.x += enemySpeed * enemyDirection;
-            enemy.element.style.left = `${enemy.x}px`;
+  let edgeReached = false;
+  enemies.forEach((enemy) => {
+    if (enemy.alive) {
+      enemy.x += enemySpeed * enemyDirection;
+      enemy.element.style.left = `${enemy.x}px`;
 
-            // Check if enemies reach the edge
-            if (enemy.x + enemy.width > 800 || enemy.x < 0) {
-                edgeReached = true;
-            }
+      if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+        edgeReached = true;
+      }
 
-            // Check if enemy reaches the player's level
-            if (enemy.y + enemy.height >= player.y) {
-                gameOver = true;
-            }
-        }
-    });
-
-    if (edgeReached) {
-        enemyDirection += -1;
-        enemies.forEach((enemy) => {
-            enemy.y += enemyHeight;
-            enemy.element.style.top = `${enemy.y}px`;
-        });
+      if (enemy.y + enemy.height >= player.y) {
+        gameOver = true;
+      }
     }
+  });
+
+  if (edgeReached) {
+    enemyDirection *= -1;
+    enemies.forEach((enemy) => {
+      enemy.y += enemyHeight;
+      enemy.element.style.top = `${enemy.y}px`;
+    });
+  }
 }
 
 let isPaused = false;
@@ -446,7 +455,6 @@ function resetTimer() {
 function pauseGame() {
     isPaused = true;
     pauseMenu.style.display = "block";
-    // Stop the timer
     stopTimer();
 }
 
@@ -476,6 +484,8 @@ document.addEventListener("keydown", (e) => {
         } else {
             pauseGame();
         }
+    } else if ((e.key === "r" || e.key === "R") && isPaused) {
+        restartGame();
     }
 });
 
