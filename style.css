@@ -116,6 +116,21 @@ body::before {
     }
 }
 
+#gameOver {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid #444;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
 #pauseMenu {
     display: none;
     position: absolute;

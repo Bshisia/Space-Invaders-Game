@@ -7,6 +7,7 @@ const scoreDisplay = document.getElementById("scoreDisplay");
 const livesDisplay = document.getElementById("livesDisplay");
 const continueButton = document.getElementById("continueButton");
 const restartButton = document.getElementById("restartButton");
+const gameOverMessage = document.getElementById("gameOver");
 
 continueButton.addEventListener("click", resumeGame);
 restartButton.addEventListener("click", restartGame);
@@ -222,6 +223,7 @@ function updateSidebar() {
 function restartGame() {
     isPaused = false;
     pauseMenu.style.display = "none";
+    gameOverMessage.style.display = "none";
 
     while (gameContainer.firstChild) {
         gameContainer.removeChild(gameContainer.firstChild);
@@ -337,6 +339,8 @@ function checkEnemyBulletCollisions() {
                 player.element = document.createElement("div");
                 player.element.id = "player"
                 player.element.className = "player";
+                player.element.style.left = `${player.x}px`;
+                player.element.style.top = `${player.y}px`;
                 player.element.style.backgroundImage = "url('images/player.png')";
                 gameContainer.appendChild(player.element);
                 hitSound.play();
@@ -347,13 +351,7 @@ function checkEnemyBulletCollisions() {
 
 function gameLoop() {
     if (gameOver) {
-        const gameOverMessage = document.createElement("div");
-        gameOverMessage.textContent = "Game Over! Press Enter to Restart";
-        gameOverMessage.style.color = "#fff";
-        gameOverMessage.style.fontSize = "40px";
-        gameOverMessage.style.textAlign = "center";
-        gameOverMessage.style.marginTop = "50px";
-        gameContainer.appendChild(gameOverMessage);
+        gameOverMessage.style.display = "block";
         stopTimer();
         gameOverSound.play();
         return;
