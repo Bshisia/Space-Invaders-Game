@@ -117,10 +117,6 @@ function movePlayer() {
     player.element.style.left = `${player.x}px`;
 }
 
-// Player shooting
-// bullets = [];
-// enemyBullets = [];
-
 // Shoot player bullet
 function playerShoot() {
     const currentTime = Date.now();
@@ -332,6 +328,7 @@ function checkEnemyBulletCollisions() {
             // End game if no lives left
             if (lives === 0) {
                 gameOver = true;
+                triggerExplosion(player.x, player.y)
             } else {
                 // Reset player position if lives remain
                 player.alive = true;
@@ -344,20 +341,6 @@ function checkEnemyBulletCollisions() {
         }
     });
 }
-
-// function moveShooter(e) {
-//     console.log('moveShooter')
-
-//     if (e.key === "ArrowLeft" && player.x > 0) {
-//         player.x = Math.max(0, player.x - player.speed);
-//     } else if (
-//         e.key === "ArrowRight" &&
-//         player.x + player.width < gameContainer.clientWidth
-//     ) {
-//         player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
-//     }
-//     player.element.style.left = `${player.x}px`;
-// }
 
 function gameLoop() {
     if (gameOver) {
