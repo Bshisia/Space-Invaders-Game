@@ -136,7 +136,7 @@ function playerShoot() {
             speed: 10,
         });
         lastShotTime = currentTime;
-        // shootSound.play();
+        shootSound.play();
     }
 }
 
@@ -208,6 +208,7 @@ function triggerExplosion(x, y) {
     explosion.style.top = `${y}px`;
     gameContainer.appendChild(explosion);
     setTimeout(() => explosion.remove(), 500);
+    explosionSound.play()
 }
 
 // Update the sidebar
@@ -320,6 +321,7 @@ function checkEnemyBulletCollisions() {
             // Remove the enemy bullet
             enemyBullets.splice(bulletIndex, 1);
             bullet.element.remove();
+            hitSound.play();
 
             // Decrease lives
             lives--;
@@ -337,6 +339,7 @@ function checkEnemyBulletCollisions() {
                 player.element.className = "player";
                 player.element.style.backgroundImage = "url('images/player.png')";
                 gameContainer.appendChild(player.element);
+                hitSound.play();
             }
         }
     });
@@ -352,6 +355,7 @@ function gameLoop() {
         gameOverMessage.style.marginTop = "50px";
         gameContainer.appendChild(gameOverMessage);
         stopTimer();
+        gameOverSound.play();
         return;
     }
 
