@@ -289,6 +289,7 @@ function checkPlayerBulletCollisions() {
                 bullet.element.remove();
 
                 score += 50;
+                updateSidebar();
 
                 if (enemies.every((enemy) => !enemy.alive)) {
                     levelUp();
