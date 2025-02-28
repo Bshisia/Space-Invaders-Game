@@ -20,8 +20,8 @@ let level = 1; // Track the current level
 let enemies;
 let enemyRows = 3;
 let enemyColumns = 8;
-let enemyWidth = 38;
-let enemyHeight = 60;
+let enemyWidth = 40;
+let enemyHeight = 40;
 let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
@@ -43,29 +43,48 @@ const keys = {
 
 // Tileset definition
 
-const tileset =  {
-   1: {name: "player", source: "/images/player.png"},
-   3: { name: "enemy", source: "/images/enemy.png"},
+const tileset = {
+    1: { name: "player", source: "/images/player.png" },
+    3: { name: "enemy", source: "/images/enemy.png" },
 }
+const map1 = {
+    rows: 3,
+    col: 8,
+    tiles: [
+        3, 3, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 3, 3, 3, 3, 3, 3,
+    ],
+};
+const map2 = {
+    rows: 4,
+    col: 10,
+    tiles: [
+        0, 3, 3, 3, 3, 3, 3, 3, 3, 0,
+        3, 0, 3, 3, 3, 3, 3, 3, 0, 3,
+        3, 0, 0, 3, 3, 3, 3, 0, 0, 3,
+        0, 0, 0, 0, 3, 3, 0, 0, 0, 0,
+    ],
+};
+const map3 = {
+    rows: 4,
+    col: 10,
+    tiles: [
+        3, 0, 3, 3, 3, 3, 3, 3, 0, 3,
+        0, 3, 3, 3, 3, 3, 3, 3, 3, 0,
+        0, 0, 0, 0, 3, 3, 0, 0, 0, 0,
+        3, 0, 0, 3, 3, 3, 3, 0, 0, 3,
+    ],
+};
 
 // Define the three maps
-const map1 = [
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+const maps = [
+    map1,
+    map2,
+    map3,
 ];
+let mapIndex = 0
+let currentMap = maps[mapIndex]
 
 
 // Initialize the game
@@ -100,7 +119,7 @@ function initializeGame() {
     level = 1;
     score = 0;
     lives = 3;
-    shotCooldown = initialShotCooldown; 
+    shotCooldown = initialShotCooldown;
     enemySpeed = 1; // Reset enemy speed to initial value   
 
     // Initialize enemies
@@ -116,21 +135,24 @@ function initializeGame() {
 
 // Initialize enemies
 function initializeEnemies() {
-    for (let row = 0; row < enemyRows; row++) {
-        for (let col = 0; col < enemyColumns; col++) {
-            const enemy = document.createElement("div");
-            enemy.className = "enemy";
-            enemy.style.left = `${col * (enemyWidth + 10)}px`;
-            enemy.style.top = `${row * (enemyHeight + 10)}px`;
-            gameContainer.appendChild(enemy);
-            enemies.push({
-                element: enemy,
-                x: col * (enemyWidth + 10),
-                y: row * (enemyHeight + 10),
-                width: enemyWidth,
-                height: enemyHeight,
-                alive: true,
-            });
+    for (let row = 0; row < currentMap.rows; row++) {
+        for (let col = 0; col < currentMap.col; col++) {
+            if (currentMap.tiles[row * currentMap.col + col] === 3) {
+                const enemy = document.createElement("div");
+                enemy.className = "enemy";
+                enemy.style.left = `${col * (enemyWidth + 10)}px`;
+                enemy.style.top = `${row * (enemyHeight + 10)}px`;
+                gameContainer.appendChild(enemy);
+                enemies.push({
+                    element: enemy,
+                    x: col * (enemyWidth + 10),
+                    y: row * (enemyHeight + 10),
+                    width: enemyWidth,
+                    height: enemyHeight,
+                    alive: true,
+                });
+
+            }
         }
     }
 }
@@ -242,9 +264,9 @@ function triggerExplosion(x, y) {
 
 // Update the sidebar
 function updateSidebar() {
-   levelDisplay.textContent = level;
-   scoreDisplay.textContent = score;
-   livesDisplay.textContent = lives;
+    levelDisplay.textContent = level;
+    scoreDisplay.textContent = score;
+    livesDisplay.textContent = lives;
 }
 
 // Restart the game
@@ -329,13 +351,18 @@ function checkPlayerBulletCollisions() {
 
 // Level up
 function levelUp() {
-  level++;
-  enemyShootInterval = Math.max(200, enemyShootInterval - 100);
-  enemySpeed += 0.5; // Increase enemy speed
-  shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
+    level++;
+    mapIndex++;
+    if (mapIndex === maps.length) {
+        mapIndex = 0;
+    }
+    currentMap = maps[mapIndex];
+    enemyShootInterval = Math.max(200, enemyShootInterval - 100);
+    enemySpeed += 0.5; // Increase enemy speed
+    shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
 
-  initializeEnemies();
-  updateSidebar();
+    initializeEnemies();
+    updateSidebar();
 }
 
 function checkEnemyBulletCollisions() {
@@ -389,7 +416,7 @@ function gameLoop() {
     if (isPaused) {
         return;
     }
-    
+
     movePlayer();
     playerShoot();
     updateBullets();
@@ -416,29 +443,29 @@ function gameLoop() {
 
 // Update enemies
 function updateEnemies() {
-  let edgeReached = false;
-  enemies.forEach((enemy) => {
-    if (enemy.alive) {
-      enemy.x += enemySpeed * enemyDirection;
-      enemy.element.style.left = `${enemy.x}px`;
-
-      if (enemy.x + enemy.width > 800 || enemy.x < 0) {
-        edgeReached = true;
-      }
-
-      if (enemy.y + enemy.height >= player.y) {
-        gameOver = true;
-      }
-    }
-  });
-
-  if (edgeReached) {
-    enemyDirection *= -1;
+    let edgeReached = false;
     enemies.forEach((enemy) => {
-      enemy.y += enemyHeight;
-      enemy.element.style.top = `${enemy.y}px`;
+        if (enemy.alive) {
+            enemy.x += enemySpeed * enemyDirection;
+            enemy.element.style.left = `${enemy.x}px`;
+
+            if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+                edgeReached = true;
+            }
+
+            if (enemy.y + enemy.height >= player.y) {
+                gameOver = true;
+            }
+        }
     });
-  }
+
+    if (edgeReached) {
+        enemyDirection *= -1;
+        enemies.forEach((enemy) => {
+            enemy.y += enemyHeight;
+            enemy.element.style.top = `${enemy.y}px`;
+        });
+    }
 }
 
 let isPaused = false;
