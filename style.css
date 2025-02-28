@@ -6,7 +6,7 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Arial', sans-serif;
-    background-image: url(/images/BG.jpeg);
+    background-image: url("/images/BG.jpeg");
 
 }
 
@@ -67,7 +67,7 @@ body::before {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url("/images/player.png");
+    background-image: url("/images/player-2.png");
     background-size: cover;
     background-position: center;
     bottom: 5px;
@@ -90,9 +90,9 @@ body::before {
 
 .enemy {
     position: absolute;
-    width: 30px;
-    height: 50px;
-    background-image: url("/images/enemy.png");
+    width: 40px;
+    height: 40px;
+    background-image: url("/images/enemy-2.png");
     background-size: cover;
     background-position: center;
 }
