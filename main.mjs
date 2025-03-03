@@ -78,9 +78,9 @@ const tileMap1 = {
     rows: 15,
     col: 20,
     tiles: [
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
@@ -94,26 +94,47 @@ const tileMap1 = {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
 ]};
+const tileMap2 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+]};
 
-function createTileGrid() {
-    // tileGrid.innerHTML = '';
-    for (let y = 0; y < tileMap1.rows; y++) {
-        for (let x = 0; x < tileMap1.col; x++) {
-            const tile = document.createElement("div");
-            const tileType = tileMap1.tiles[y][x]
-            tile.style.width = '40px';
-            tile.style.height = '40px';
-            tile.style.position = 'absolute';
-            tile.style.left = `${x*40}px`;
-            tile.style.top = `${y *40}px`;
-            if (tileType === 2) {
-                tile.classList.add('asteroid');
-            };
-            gameContainer.appendChild(tile);
-        }
-    }
-}
-
+const tileMap3 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+]};
 
 
 // Define the three enemyMaps
@@ -122,8 +143,17 @@ const enemyMaps = [
     enemyMap2,
     enemyMap3,
 ];
+
+const tileMaps = [
+    tileMap1,
+    tileMap2,
+    tileMap3,
+]
+
+// Initialize the current enemy map and index
 let enemyMapIndex = 0
 let currentenemyMap = enemyMaps[enemyMapIndex]
+let currentTileMap = tileMaps[enemyMapIndex]
 
 
 // Initialize the game
@@ -173,6 +203,27 @@ function initializeGame() {
     resetTimer();
     startTimer();
 }
+
+
+function createTileGrid() {
+    // tileGrid.innerHTML = '';
+    for (let y = 0; y < currentTileMap.rows; y++) {
+        for (let x = 0; x < currentTileMap.col; x++) {
+            const tile = document.createElement("div");
+            const tileType = currentTileMap.tiles[y][x]
+            tile.style.width = '40px';
+            tile.style.height = '40px';
+            tile.style.position = 'absolute';
+            tile.style.left = `${x*40}px`;
+            tile.style.top = `${y *40}px`;
+            if (tileType === 2) {
+                tile.classList.add('asteroid');
+            };
+            gameContainer.appendChild(tile);
+        }
+    }
+}
+
 
 // Initialize enemies
 function initializeEnemies() {
@@ -398,10 +449,11 @@ function levelUp() {
         enemyMapIndex = 0;
     }
     currentenemyMap = enemyMaps[enemyMapIndex];
+    currentTileMap = tileMaps[enemyMapIndex];
     enemyShootInterval = Math.max(200, enemyShootInterval - 100);
     enemySpeed += 0.5; // Increase enemy speed
     shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
-
+    createTileGrid();
     initializeEnemies();
     updateSidebar();
 }
