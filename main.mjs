@@ -18,8 +18,6 @@ let score = 0; // Track the player's score
 let lives = 3; // Track the player's lives
 let level = 1; // Track the current level
 let enemies;
-let enemyRows = 3;
-let enemyColumns = 8;
 let enemyWidth = 40;
 let enemyHeight = 40;
 let enemySpeed = 1; // Initial enemy speed
@@ -42,7 +40,6 @@ const keys = {
 
 
 // Tileset definition
-
 const tileset = {
     1: { name: "player", source: "/images/player.png" },
     3: { name: "enemy", source: "/images/enemy.png" },
@@ -51,29 +48,29 @@ const enemyMap1 = {
     rows: 3,
     col: 8,
     tiles: [
-        3, 3, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3, 3, 3, 3, 3, 3,
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
     ],
 };
 const enemyMap2 = {
     rows: 4,
     col: 10,
     tiles: [
-        0, 3, 3, 3, 3, 3, 3, 3, 3, 0,
-        3, 0, 3, 3, 3, 3, 3, 3, 0, 3,
-        3, 0, 0, 3, 3, 3, 3, 0, 0, 3,
-        0, 0, 0, 0, 3, 3, 0, 0, 0, 0,
+        [0, 3, 3, 3, 3, 3, 3, 3, 3, 0,],
+        [3, 0, 3, 3, 3, 3, 3, 3, 0, 3,],
+        [3, 0, 0, 3, 3, 3, 3, 0, 0, 3,],
+        [0, 0, 0, 0, 3, 3, 0, 0, 0, 0,],
     ],
 };
 const enemyMap3 = {
     rows: 4,
     col: 10,
     tiles: [
-        3, 0, 3, 3, 3, 3, 3, 3, 0, 3,
-        0, 3, 3, 3, 3, 3, 3, 3, 3, 0,
-        0, 0, 0, 0, 3, 3, 0, 0, 0, 0,
-        3, 0, 0, 3, 3, 3, 3, 0, 0, 3,
+        [3, 0, 3, 3, 3, 3, 3, 3, 0, 3,],
+        [0, 3, 3, 3, 3, 3, 3, 3, 3, 0,],
+        [0, 0, 0, 0, 3, 3, 0, 0, 0, 0,],
+        [3, 0, 0, 3, 3, 3, 3, 0, 0, 3,],
     ],
 };
 
@@ -137,7 +134,7 @@ function initializeGame() {
 function initializeEnemies() {
     for (let row = 0; row < currentenemyMap.rows; row++) {
         for (let col = 0; col < currentenemyMap.col; col++) {
-            if (currentenemyMap.tiles[row * currentenemyMap.col + col] === 3) {
+            if (currentenemyMap.tiles[row][col] === 3) {
                 const enemy = document.createElement("div");
                 enemy.className = "enemy";
                 enemy.style.left = `${col * (enemyWidth + 10)}px`;
