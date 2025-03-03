@@ -47,7 +47,7 @@ const tileset = {
     1: { name: "player", source: "/images/player.png" },
     3: { name: "enemy", source: "/images/enemy.png" },
 }
-const map1 = {
+const enemyMap1 = {
     rows: 3,
     col: 8,
     tiles: [
@@ -56,7 +56,7 @@ const map1 = {
         3, 3, 3, 3, 3, 3, 3, 3, 3,
     ],
 };
-const map2 = {
+const enemyMap2 = {
     rows: 4,
     col: 10,
     tiles: [
@@ -66,7 +66,7 @@ const map2 = {
         0, 0, 0, 0, 3, 3, 0, 0, 0, 0,
     ],
 };
-const map3 = {
+const enemyMap3 = {
     rows: 4,
     col: 10,
     tiles: [
@@ -77,14 +77,14 @@ const map3 = {
     ],
 };
 
-// Define the three maps
-const maps = [
-    map1,
-    map2,
-    map3,
+// Define the three enemyMaps
+const enemyMaps = [
+    enemyMap1,
+    enemyMap2,
+    enemyMap3,
 ];
-let mapIndex = 0
-let currentMap = maps[mapIndex]
+let enemyMapIndex = 0
+let currentenemyMap = enemyMaps[enemyMapIndex]
 
 
 // Initialize the game
@@ -135,9 +135,9 @@ function initializeGame() {
 
 // Initialize enemies
 function initializeEnemies() {
-    for (let row = 0; row < currentMap.rows; row++) {
-        for (let col = 0; col < currentMap.col; col++) {
-            if (currentMap.tiles[row * currentMap.col + col] === 3) {
+    for (let row = 0; row < currentenemyMap.rows; row++) {
+        for (let col = 0; col < currentenemyMap.col; col++) {
+            if (currentenemyMap.tiles[row * currentenemyMap.col + col] === 3) {
                 const enemy = document.createElement("div");
                 enemy.className = "enemy";
                 enemy.style.left = `${col * (enemyWidth + 10)}px`;
@@ -352,11 +352,11 @@ function checkPlayerBulletCollisions() {
 // Level up
 function levelUp() {
     level++;
-    mapIndex++;
-    if (mapIndex === maps.length) {
-        mapIndex = 0;
+    enemyMapIndex++;
+    if (enemyMapIndex === enemyMaps.length) {
+        enemyMapIndex = 0;
     }
-    currentMap = maps[mapIndex];
+    currentenemyMap = enemyMaps[enemyMapIndex];
     enemyShootInterval = Math.max(200, enemyShootInterval - 100);
     enemySpeed += 0.5; // Increase enemy speed
     shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
