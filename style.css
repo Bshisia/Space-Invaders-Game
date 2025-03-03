@@ -92,7 +92,16 @@ body::before {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url("/images/enemy-2.png");
+    background-image: url("/images/alien-2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.asteroid {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url("/images/asteroid.png");
     background-size: cover;
     background-position: center;
 }

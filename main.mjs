@@ -74,6 +74,48 @@ const enemyMap3 = {
     ],
 };
 
+const tileMap1 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+]};
+
+function createTileGrid() {
+    // tileGrid.innerHTML = '';
+    for (let y = 0; y < tileMap1.rows; y++) {
+        for (let x = 0; x < tileMap1.col; x++) {
+            const tile = document.createElement("div");
+            const tileType = tileMap1.tiles[y][x]
+            tile.style.width = '40px';
+            tile.style.height = '40px';
+            tile.style.position = 'absolute';
+            tile.style.left = `${x*40}px`;
+            tile.style.top = `${y *40}px`;
+            if (tileType === 2) {
+                tile.classList.add('asteroid');
+            };
+            gameContainer.appendChild(tile);
+        }
+    }
+}
+
+
+
 // Define the three enemyMaps
 const enemyMaps = [
     enemyMap1,
@@ -118,6 +160,8 @@ function initializeGame() {
     lives = 3;
     shotCooldown = initialShotCooldown;
     enemySpeed = 1; // Reset enemy speed to initial value   
+
+    createTileGrid();
 
     // Initialize enemies
     initializeEnemies();
