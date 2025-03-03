@@ -97,6 +97,19 @@ body::before {
     background-position: center;
 }
 
+.enemy-1, .enemy-2, .enemy-3 {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+}
+ .enemy-1 {
+    background-image: url("/images/alien-2.png");
+ }
+ .enemy-2 {
+    background-image: url("/images/enemy-2.png");
+ }
 .asteroid {
     position: absolute;
     width: 40px;
