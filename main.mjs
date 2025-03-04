@@ -41,20 +41,8 @@ const keys = {
 const spriteNames = {
     0:'explosion', 1:'greenAlien', 2:'ufo', 3:'asteroid1', 4:'asteroid2', 5:'asteroid3', 6:'asteroid4', 7:'jet1', 8:'jet2', 9:'rocket1', 10:'rocket2'
 };
-// Tileset definition
-const tileset = {
-    "asteroid": 0,
-    "greenAlien": 1,
-    "ufo": 2,
-    "asteroid-1": 3,
-    "asteroid-2": 4,
-    "asteroid-3": 5,
-    "asteroid-4": 6,
-    "enemy-rocket": 7,
-    "player": 8,
-    "player-1":9,
-    "player-2":10
-}
+const bg = []
+
 const enemyMap1 = {
     rows: 3,
     col: 8,
@@ -89,8 +77,8 @@ const tileMap1 = {
     rows: 15,
     col: 20,
     tiles: [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
@@ -187,10 +175,6 @@ function initializeGame() {
     // player.element.id = "player";
     player.element.classList.add('sprite');
     player.element.classList.add(spriteNames[8]);
-    // player.element.style.backgroundPosition = `-${tileset['player']*40}px`;
-    // player.element.style.position = "absolute";
-    // player.element.style.width = `${player.width}px`;
-    // player.element.style.height = `${player.height}px`;
     player.element.style.left = `${player.x}px`;
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
@@ -220,24 +204,15 @@ function initializeGame() {
 
 
 function createTileGrid() {
-    // tileGrid.innerHTML = '';
     for (let y = 0; y < currentTileMap.rows; y++) {
         for (let x = 0; x < currentTileMap.col; x++) {
-            const tile = document.createElement("div");
-            const tileType = currentTileMap.tiles[y][x]
-            // tile.classList.add('gameObject');
-            // tile.style.backgroundPosition = `-${tileset['asteroid']*40}px`;
-            // tile.style.width = '40px';
-            // tile.style.height = '40px';
-            // tile.style.position = 'absolute';
-            tile.style.left = `${x*40}px`;
-            tile.style.top = `${y *40}px`;
-            if (tileType === 2) {
-                // tile.classList.add('asteroid');
-                tile.classList.add('sprite');
-                tile.classList.add(spriteNames[3]);
-            };
-            gameContainer.appendChild(tile);
+            if (currentTileMap.tiles[y][x] === 2) {
+                const tile = document.createElement("div");
+                tile.style.left = `${x*40}px`;
+                tile.style.top = `${y *40}px`;
+                tile.className = 'sprite ' + spriteNames[3];
+                gameContainer.appendChild(tile);
+            } 
         }
     }
 }
@@ -273,18 +248,20 @@ function movePlayer() {
     if (keys.ArrowLeft && player.x > 0) {
         player.x = Math.max(0, player.x - player.speed);
     }
-    if (keys.ArrowRight && player.x + player.width < gameContainer.clientWidth) {
-        player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
+    if (keys.ArrowRight && player.x + player.width < 800) {
+        player.x = Math.min(800- player.width, player.x + player.speed);
     }
     player.element.style.left = `${player.x}px`;
 }
 
 // Shoot player bullet
-function playerShoot() {
-    const currentTime = Date.now();
+function playerShoot(timestamp) {
+    const currentTime = timestamp
     if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
         const bullet = document.createElement("div");
         bullet.className = "bullet";
+        bullet.style.backgroundColor = "red"; // Player bullet color
+
         bullet.style.left = `${player.x + player.width / 2 - 2.5}px`;
         bullet.style.top = `${player.y - 10}px`;
         gameContainer.appendChild(bullet);
@@ -310,27 +287,29 @@ function updateBullets() {
 
         // Remove bullet if it goes off-screen
         if (bullet.y + bullet.height < 0) {
-            bullet.element.remove();
+            bullet.element.style.visibility = 'hidden';
             bullets.splice(index, 1);
         }
     });
 }
 
 // Update bullet colors
-function updateBulletColors() {
-    bullets.forEach((bullet) => {
-        bullet.element.style.backgroundColor = "red"; // Player bullet color
-    });
+// function updateBulletColors() {
+//     bullets.forEach((bullet) => {
+//         bullet.element.style.backgroundColor = "red"; // Player bullet color
+//     });
 
-    enemyBullets.forEach((bullet) => {
-        bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
-    });
-}
+//     enemyBullets.forEach((bullet) => {
+//         bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
+//     });
+// }
 
 // Shoot enemy bullets
 function shootEnemyBullet(enemy) {
     const enemyBullet = document.createElement("div");
     enemyBullet.className = "bullet";
+    enemyBullet.style.backgroundColor = "yellow"; // Player bullet color
+
     enemyBullet.style.left = `${enemy.x + enemy.width / 2 - 2.5}px`;
     enemyBullet.style.top = `${enemy.y + enemy.height}px`;
     gameContainer.appendChild(enemyBullet);
@@ -428,8 +407,10 @@ function checkBulletCollisions() {
                     (playerBullet.y + enemyBullet.y) / 2
                 );
 
-                playerBullet.element.remove();
-                enemyBullet.element.remove();
+                // playerBullet.element.remove();
+                playerBullet.element.style.visibility = 'hidden';
+                // enemyBullet.element.remove();
+                enemyBullet.element.style.visibility = 'hidden';
                 bullets.splice(playerBulletIndex, 1);
                 enemyBullets.splice(enemyBulletIndex, 1);
             }
@@ -443,11 +424,13 @@ function checkPlayerBulletCollisions() {
             if (
                 enemy.alive && hasCollided(bullet, enemy)
             ) {
-                triggerExplosion(enemy.x, enemy.y);
+                triggerExplosion(enemy.x, enemy.y); 
                 enemy.alive = false;
-                enemy.element.remove();
+                enemy.element.style.visibility = 'hidden';
                 bullets.splice(bulletIndex, 1);
-                bullet.element.remove();
+                // bullet.element.remove();
+            bullet.element.style.visibility = 'hidden';
+
 
                 score += 50;
                 updateSidebar();
@@ -486,11 +469,11 @@ function checkEnemyBulletCollisions() {
             player.alive = false;
 
             // Remove the player's image
-            player.element.remove();
+            // player.element.remove();
 
             // Remove the enemy bullet
             enemyBullets.splice(bulletIndex, 1);
-            bullet.element.remove();
+            bullet.element.style.visibility = 'hidden';
             hitSound.play();
 
             // Decrease lives
@@ -500,23 +483,35 @@ function checkEnemyBulletCollisions() {
             // End game if no lives left
             if (lives === 0) {
                 gameOver = true;
+                player.element.style.visibility = 'hidden';
                 triggerExplosion(player.x, player.y)
             } else {
                 // Reset player position if lives remain
                 player.alive = true;
-                player.element = document.createElement("div");
-                player.element.classList.add('sprite');
-                player.element.classList.add(spriteNames[8]);
-                player.element.style.left = `${player.x}px`;
-                player.element.style.top = `${player.y}px`;
-                gameContainer.appendChild(player.element);
+                // player.element = document.createElement("div");
+                // player.element.classList.add('sprite');
+                // player.element.classList.add(spriteNames[8]);
+                // player.element.style.left = `${player.x}px`;
+                // player.element.style.top = `${player.y}px`;
+                // gameContainer.appendChild(player.element);
                 hitSound.play();
             }
         }
     });
 }
 
-function gameLoop() {
+function yieldToMain () {
+    if (globalThis.scheduler?.yield) {
+      return scheduler.yield();
+    }
+  
+    // Fall back to yielding with setTimeout.
+    return new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
+  }
+
+function gameLoop(timestamp) {
     if (gameOver) {
         gameOverMessage.style.display = "block";
         stopTimer();
@@ -529,17 +524,18 @@ function gameLoop() {
     }
 
     movePlayer();
-    playerShoot();
+    playerShoot(timestamp);
+    yieldToMain();
     updateBullets();
     updateEnemyBullets();
     updateEnemies();
-    updateBulletColors();
+    // updateBulletColors();
 
     checkPlayerBulletCollisions();
     checkEnemyBulletCollisions();
     checkBulletCollisions();
 
-    const now = Date.now();
+    const now = timestamp
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
         if (aliveEnemies.length > 0) {
