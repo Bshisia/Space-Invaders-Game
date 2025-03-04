@@ -6,7 +6,7 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Arial', sans-serif;
-    background-image: url("/images/BG.jpeg");
+    /* background-image: url("/images/BG.jpeg"); */
 
 }
 
@@ -19,7 +19,7 @@ body {
         background-position: 1000px 1000px;
     }
 }
-
+/* 
 body::before {
     content: '';
     position: absolute;
@@ -31,7 +31,7 @@ body::before {
     animation: stars 100s linear infinite;
     opacity: 0.5;
     z-index: -1;
-}
+} */
 
 #gameContainer {
     position: relative;
@@ -41,6 +41,8 @@ body::before {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
+
+/* sidebar */
 
 #sidebar {
     width: 200px;
@@ -63,13 +65,28 @@ body::before {
     padding-top: 30px;
 }
 
-.gameObject {
+
+/* sprites */
+
+.sprite {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url("/images/spritesheet-x.png");
+    background-image: url("/images/spritesheet-x2.png");
     background-size: cover;
 }
+
+.greenAlien {background-position: 0px 0px;}
+.ufo {background-position: -40px 0px;}
+.asteroid1 {background-position: -80px 0px;}
+.asteroid2 {background-position: -120px 0px;}
+.asteroid3 {background-position: -160px 0px}
+.asteroid4{background-position: -200px 0px}
+.jet1 {background-position: -240px 0px}
+.explosion {background-position: -280px 0px;  opacity: 0.8; animation: explode 0.5s ease-out;}
+.jet2 {background-position: -320px 0px;}
+.rocket1 {background-position: -360 0px;}
+.rocket2 {background-position: -400px 0px;}
 
 #player {
     /* position: absolute;
@@ -81,7 +98,7 @@ body::before {
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
 }
 
 @keyframes float {
@@ -96,28 +113,6 @@ body::before {
     }
 }
 
-.enemy {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-image: url("/images/alien-2.png");
-    background-size: cover;
-    background-position: center;
-}
-
-.green-alien, .enemy-rocket, .ufo, .asteroid-1, .asteroid-2, .asteroid-3, .asteroid-4, .asteroid {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-image: url("/images/spritesheet-x.png");
-    background-size: cover;
-}
-
-.asteroid {background-position: 0px 0px;}
-.green-alien { background-position: -43px 0px;}
-.ufo { background-position: -86px 0px;}
-.asteroid-1 {background-position: -129px 0px;}
-.enemy-rocket { background-position: -301px 0px;}
 .asteroid {
     position: absolute;
     width: 40px;
@@ -133,7 +128,7 @@ body::before {
     height: 10px;
     background-color: #ff4444;
     box-shadow: 0 0 10px #ff4444;
-    animation: pulse 0.5s infinite alternate;
+    /* animation: pulse 0.5s infinite alternate; */
 }
 
 @keyframes pulse {
@@ -192,15 +187,15 @@ body::before {
     background: linear-gradient(135deg, #666, #888);
   }
 
-  .explosion {
+  /* .explosion {
     position: absolute;
     width: 50px;
     height: 50px;
     background-image: url("/images/explosion.png");
     background-size: cover;
     opacity: 0.8;
-    animation: explode 0.5s ease-out;
-  }
+    /* animation: explode 0.5s ease-out;
+  } */
 
   @keyframes explode {
     0% {

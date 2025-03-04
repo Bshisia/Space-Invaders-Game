@@ -38,7 +38,9 @@ const keys = {
     Space: false,
 };
 
-
+const spriteNames = {
+    0:'explosion', 1:'greenAlien', 2:'ufo', 3:'asteroid1', 4:'asteroid2', 5:'asteroid3', 6:'asteroid4', 7:'jet1', 8:'jet2', 9:'rocket1', 10:'rocket2'
+};
 // Tileset definition
 const tileset = {
     "asteroid": 0,
@@ -182,9 +184,10 @@ function initializeGame() {
         speed: 5,
         alive: true,
     };
-    player.element.id = "player";
-    player.element.classList.add('gameObject');
-    player.element.style.backgroundPosition = `-${tileset['player']*40}px`;
+    // player.element.id = "player";
+    player.element.classList.add('sprite');
+    player.element.classList.add(spriteNames[8]);
+    // player.element.style.backgroundPosition = `-${tileset['player']*40}px`;
     // player.element.style.position = "absolute";
     // player.element.style.width = `${player.width}px`;
     // player.element.style.height = `${player.height}px`;
@@ -231,8 +234,8 @@ function createTileGrid() {
             tile.style.top = `${y *40}px`;
             if (tileType === 2) {
                 // tile.classList.add('asteroid');
-                tile.classList.add('gameObject');
-                tile.style.backgroundPosition = `-${tileset['asteroid']*40}px`;
+                tile.classList.add('sprite');
+                tile.classList.add(spriteNames[3]);
             };
             gameContainer.appendChild(tile);
         }
@@ -246,7 +249,8 @@ function initializeEnemies() {
         for (let col = 0; col < currentenemyMap.col; col++) {
             if (currentenemyMap.tiles[row][col] === 3) {
                 const enemy = document.createElement("div");
-                enemy.className = "enemy";
+                enemy.classList.add('sprite');
+                enemy.classList.add(spriteNames[2]);
                 enemy.style.left = `${col * (enemyWidth + 10)}px`;
                 enemy.style.top = `${row * (enemyHeight + 10)}px`;
                 gameContainer.appendChild(enemy);
@@ -361,7 +365,7 @@ function triggerExplosion(x, y) {
         existingExplosion.remove();
     }
     const explosion = document.createElement("div");
-    explosion.className = "explosion";
+    explosion.className = "sprite explosion";
     explosion.style.left = `${x}px`;
     explosion.style.top = `${y}px`;
     gameContainer.appendChild(explosion);
@@ -501,11 +505,10 @@ function checkEnemyBulletCollisions() {
                 // Reset player position if lives remain
                 player.alive = true;
                 player.element = document.createElement("div");
-                player.element.id = "player"
-                player.element.className = "player";
+                player.element.classList.add('sprite');
+                player.element.classList.add(spriteNames[8]);
                 player.element.style.left = `${player.x}px`;
                 player.element.style.top = `${player.y}px`;
-                player.element.style.backgroundImage = "url('images/player.png')";
                 gameContainer.appendChild(player.element);
                 hitSound.play();
             }
