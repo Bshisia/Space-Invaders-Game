@@ -652,7 +652,9 @@ document.addEventListener("keydown", (e) => {
         keys.Space = true;
     } else if (e.key === "Enter" && gameOver) {
         // Restart the game when Enter is pressed after game over
-        restartGame();
+        gameOverMessage.style.display = "none";
+        startMenu.style.visibility = "visible"
+        // restartGame();
     } else if (e.key === "p" || e.key === "P") {
         if (isPaused) {
             resumeGame();

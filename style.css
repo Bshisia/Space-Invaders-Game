@@ -160,7 +160,7 @@ body::before {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#pauseMenu button {
+#pauseMenu button, .start-menu button {
     margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
