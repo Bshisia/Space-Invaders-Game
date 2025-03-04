@@ -41,8 +41,17 @@ const keys = {
 
 // Tileset definition
 const tileset = {
-    1: { name: "player", source: "/images/player.png" },
-    3: { name: "enemy", source: "/images/enemy.png" },
+    "asteroid": 0,
+    "greenAlien": 1,
+    "ufo": 2,
+    "asteroid-1": 3,
+    "asteroid-2": 4,
+    "asteroid-3": 5,
+    "asteroid-4": 6,
+    "enemy-rocket": 7,
+    "player": 8,
+    "player-1":9,
+    "player-2":10
 }
 const enemyMap1 = {
     rows: 3,
@@ -174,9 +183,11 @@ function initializeGame() {
         alive: true,
     };
     player.element.id = "player";
-    player.element.style.position = "absolute";
-    player.element.style.width = `${player.width}px`;
-    player.element.style.height = `${player.height}px`;
+    player.element.classList.add('gameObject');
+    player.element.style.backgroundPosition = `-${tileset['player']*40}px`;
+    // player.element.style.position = "absolute";
+    // player.element.style.width = `${player.width}px`;
+    // player.element.style.height = `${player.height}px`;
     player.element.style.left = `${player.x}px`;
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
@@ -211,13 +222,17 @@ function createTileGrid() {
         for (let x = 0; x < currentTileMap.col; x++) {
             const tile = document.createElement("div");
             const tileType = currentTileMap.tiles[y][x]
-            tile.style.width = '40px';
-            tile.style.height = '40px';
-            tile.style.position = 'absolute';
+            // tile.classList.add('gameObject');
+            // tile.style.backgroundPosition = `-${tileset['asteroid']*40}px`;
+            // tile.style.width = '40px';
+            // tile.style.height = '40px';
+            // tile.style.position = 'absolute';
             tile.style.left = `${x*40}px`;
             tile.style.top = `${y *40}px`;
             if (tileType === 2) {
-                tile.classList.add('asteroid');
+                // tile.classList.add('asteroid');
+                tile.classList.add('gameObject');
+                tile.style.backgroundPosition = `-${tileset['asteroid']*40}px`;
             };
             gameContainer.appendChild(tile);
         }

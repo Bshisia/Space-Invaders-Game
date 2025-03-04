@@ -63,13 +63,21 @@ body::before {
     padding-top: 30px;
 }
 
-#player {
+.gameObject {
     position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url("/images/spritesheet-x.png");
+    background-size: cover;
+}
+
+#player {
+    /* position: absolute;
     width: 40px;
     height: 40px;
     background-image: url("/images/player-2.png");
     background-size: cover;
-    background-position: center;
+    background-position: center; */
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
@@ -97,19 +105,19 @@ body::before {
     background-position: center;
 }
 
-.enemy-1, .enemy-2, .enemy-3 {
+.green-alien, .enemy-rocket, .ufo, .asteroid-1, .asteroid-2, .asteroid-3, .asteroid-4, .asteroid {
     position: absolute;
     width: 40px;
     height: 40px;
+    background-image: url("/images/spritesheet-x.png");
     background-size: cover;
-    background-position: center;
 }
- .enemy-1 {
-    background-image: url("/images/alien-2.png");
- }
- .enemy-2 {
-    background-image: url("/images/enemy-2.png");
- }
+
+.asteroid {background-position: 0px 0px;}
+.green-alien { background-position: -43px 0px;}
+.ufo { background-position: -86px 0px;}
+.asteroid-1 {background-position: -129px 0px;}
+.enemy-rocket { background-position: -301px 0px;}
 .asteroid {
     position: absolute;
     width: 40px;
