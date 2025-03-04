@@ -8,6 +8,7 @@ const livesDisplay = document.getElementById("livesDisplay");
 const continueButton = document.getElementById("continueButton");
 const restartButton = document.getElementById("restartButton");
 const gameOverMessage = document.getElementById("gameOver");
+const startMenu = document.querySelector(".start-menu");
 
 continueButton.addEventListener("click", resumeGame);
 restartButton.addEventListener("click", restartGame);
@@ -37,11 +38,6 @@ const keys = {
     ArrowRight: false,
     Space: false,
 };
-
-const spriteNames = {
-    0:'explosion', 1:'greenAlien', 2:'ufo', 3:'asteroid1', 4:'asteroid2', 5:'asteroid3', 6:'asteroid4', 7:'jet1', 8:'jet2', 9:'rocket1', 10:'rocket2'
-};
-const bg = []
 
 const enemyMap1 = {
     rows: 3,
@@ -79,61 +75,64 @@ const tileMap1 = {
     tiles: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-]};
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
 const tileMap2 = {
     rows: 15,
     col: 20,
     tiles: [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-]};
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
 
 const tileMap3 = {
     rows: 15,
     col: 20,
     tiles: [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-]};
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
 
 
 // Define the three enemyMaps
@@ -149,16 +148,42 @@ const tileMaps = [
     tileMap3,
 ]
 
+const bg = {
+    1: "url(/images/bg-1.jpg)",
+    2: "url(/images/bg-2.jpeg)",
+    3: "url(/images/bg-3.jpg)",
+}
+
+const spriteNames = {
+    0: 'explosion', 1: 'greenAlien', 2: 'ufo', 3: 'asteroid1', 4: 'asteroid2', 5: 'asteroid3', 6: 'asteroid4', 7: 'jet1', 8: 'jet2', 9: 'rocket1', 10: 'rocket2'
+};
+
+const gameObjects = {
+    1: ['explosion', 'greenAlien', 'asteroid2', 'rocket1'],
+    2: ['explosion', 'jet1', 'asteroid1', 'jet2'],
+    3: ['explosion', 'ufo', 'asteroid3', 'rocket2'],
+}
+
 // Initialize the current enemy map and index
 let enemyMapIndex = 0
 let currentenemyMap = enemyMaps[enemyMapIndex]
 let currentTileMap = tileMaps[enemyMapIndex]
+let currentGameObjects = gameObjects[1];
 
+function startGame(mapNumber) {
+    currentGameObjects= gameObjects[mapNumber];
 
+    gameContainer.style.backgroundImage = bg[mapNumber];
+    gameContainer.style.backgroundSize = "cover";
+    // Start the game
+    initializeGame();
+    startMenu.style.visibility = "hidden";
+    gameLoop();
+}
 // Initialize the game
 function initializeGame() {
     // Clear the game container
-    while (gameContainer.firstChild) {
+    while (gameContainer.firstChild) {gameObjects
         gameContainer.removeChild(gameContainer.firstChild);
     }
 
@@ -173,8 +198,9 @@ function initializeGame() {
         alive: true,
     };
     // player.element.id = "player";
-    player.element.classList.add('sprite');
-    player.element.classList.add(spriteNames[8]);
+    player.element.className = 'sprite ' + currentGameObjects[3];
+    // player.element.classList.add('sprite');
+    // player.element.classList.add(spriteNames[8]);
     player.element.style.left = `${player.x}px`;
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
@@ -208,11 +234,11 @@ function createTileGrid() {
         for (let x = 0; x < currentTileMap.col; x++) {
             if (currentTileMap.tiles[y][x] === 2) {
                 const tile = document.createElement("div");
-                tile.style.left = `${x*40}px`;
-                tile.style.top = `${y *40}px`;
-                tile.className = 'sprite ' + spriteNames[3];
+                tile.style.left = `${x * 40}px`;
+                tile.style.top = `${y * 40}px`;
+                tile.className = 'sprite ' + currentGameObjects[2];
                 gameContainer.appendChild(tile);
-            } 
+            }
         }
     }
 }
@@ -224,8 +250,9 @@ function initializeEnemies() {
         for (let col = 0; col < currentenemyMap.col; col++) {
             if (currentenemyMap.tiles[row][col] === 3) {
                 const enemy = document.createElement("div");
-                enemy.classList.add('sprite');
-                enemy.classList.add(spriteNames[2]);
+                enemy.className = 'sprite ' + currentGameObjects[1]
+                // enemy.classList.add('sprite');
+                // enemy.classList.add(spriteNames[2]);
                 enemy.style.left = `${col * (enemyWidth + 10)}px`;
                 enemy.style.top = `${row * (enemyHeight + 10)}px`;
                 gameContainer.appendChild(enemy);
@@ -249,7 +276,7 @@ function movePlayer() {
         player.x = Math.max(0, player.x - player.speed);
     }
     if (keys.ArrowRight && player.x + player.width < 800) {
-        player.x = Math.min(800- player.width, player.x + player.speed);
+        player.x = Math.min(800 - player.width, player.x + player.speed);
     }
     player.element.style.left = `${player.x}px`;
 }
@@ -424,12 +451,12 @@ function checkPlayerBulletCollisions() {
             if (
                 enemy.alive && hasCollided(bullet, enemy)
             ) {
-                triggerExplosion(enemy.x, enemy.y); 
+                triggerExplosion(enemy.x, enemy.y);
                 enemy.alive = false;
                 enemy.element.style.visibility = 'hidden';
                 bullets.splice(bulletIndex, 1);
                 // bullet.element.remove();
-            bullet.element.style.visibility = 'hidden';
+                bullet.element.style.visibility = 'hidden';
 
 
                 score += 50;
@@ -500,16 +527,16 @@ function checkEnemyBulletCollisions() {
     });
 }
 
-function yieldToMain () {
+function yieldToMain() {
     if (globalThis.scheduler?.yield) {
-      return scheduler.yield();
+        return scheduler.yield();
     }
-  
+
     // Fall back to yielding with setTimeout.
     return new Promise(resolve => {
-      setTimeout(resolve, 0);
+        setTimeout(resolve, 0);
     });
-  }
+}
 
 function gameLoop(timestamp) {
     if (gameOver) {
@@ -647,6 +674,8 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-// Start the game
-initializeGame();
-gameLoop();
+// Attach event listeners to map buttons
+document.getElementById("map1Button").addEventListener("click", () => startGame(1));
+document.getElementById("map2Button").addEventListener("click", () => startGame(2));
+document.getElementById("map3Button").addEventListener("click", () => startGame(3));
+
