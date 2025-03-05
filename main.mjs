@@ -10,8 +10,7 @@ const restartButton = document.getElementById("restartButton");
 const gameOverMessage = document.getElementById("gameOver");
 const startMenu = document.querySelector(".start-menu");
 
-continueButton.addEventListener("click", resumeGame);
-restartButton.addEventListener("click", restartGame);
+
 
 // Game variables
 let player;
@@ -169,6 +168,13 @@ let enemyMapIndex = 0
 let currentenemyMap = enemyMaps[enemyMapIndex]
 let currentTileMap = tileMaps[enemyMapIndex]
 let currentGameObjects = gameObjects[1];
+
+continueButton.addEventListener("click", resumeGame);
+restartButton.addEventListener("click", () => {
+    pauseMenu.style.display = "none";
+    startMenu.style.visibility = "visible"
+    isPaused = false
+});
 
 function startGame(mapNumber) {
     currentGameObjects= gameObjects[mapNumber];
@@ -662,7 +668,11 @@ document.addEventListener("keydown", (e) => {
             pauseGame();
         }
     } else if ((e.key === "r" || e.key === "R") && isPaused) {
-        restartGame();
+        // restartGame();
+        pauseMenu.style.display = "none";
+        startMenu.style.visibility = "visible"
+        isPaused = false
+
     }
 });
 
