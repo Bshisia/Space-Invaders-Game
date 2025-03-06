@@ -8,9 +8,9 @@ const livesDisplay = document.getElementById("livesDisplay");
 const continueButton = document.getElementById("continueButton");
 const restartButton = document.getElementById("restartButton");
 const gameOverMessage = document.getElementById("gameOver");
+const startMenu = document.querySelector(".start-menu");
 
-continueButton.addEventListener("click", resumeGame);
-restartButton.addEventListener("click", restartGame);
+
 
 // Game variables
 let player;
@@ -18,10 +18,8 @@ let score = 0; // Track the player's score
 let lives = 3; // Track the player's lives
 let level = 1; // Track the current level
 let enemies;
-let enemyRows = 3;
-let enemyColumns = 8;
-let enemyWidth = 38;
-let enemyHeight = 60;
+let enemyWidth = 40;
+let enemyHeight = 40;
 let enemySpeed = 1; // Initial enemy speed
 let enemyDirection = 1;
 let bullets;
@@ -40,38 +38,158 @@ const keys = {
     Space: false,
 };
 
+const enemyMap1 = {
+    rows: 3,
+    col: 8,
+    tiles: [
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
+        [3, 3, 3, 3, 3, 3, 3, 3, 3,],
+    ],
+};
+const enemyMap2 = {
+    rows: 4,
+    col: 10,
+    tiles: [
+        [0, 3, 3, 3, 3, 3, 3, 3, 3, 0,],
+        [3, 0, 3, 3, 3, 3, 3, 3, 0, 3,],
+        [3, 0, 0, 3, 3, 3, 3, 0, 0, 3,],
+        [0, 0, 0, 0, 3, 3, 0, 0, 0, 0,],
+    ],
+};
+const enemyMap3 = {
+    rows: 4,
+    col: 10,
+    tiles: [
+        [3, 0, 3, 3, 3, 3, 3, 3, 0, 3,],
+        [0, 3, 3, 3, 3, 3, 3, 3, 3, 0,],
+        [0, 0, 0, 0, 3, 3, 0, 0, 0, 0,],
+        [3, 0, 0, 3, 3, 3, 3, 0, 0, 3,],
+    ],
+};
 
-// Tileset definition
+const tileMap1 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
+const tileMap2 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
 
-const tileset =  {
-   1: {name: "player", source: "/images/player.png"},
-   3: { name: "enemy", source: "/images/enemy.png"},
-}
+const tileMap3 = {
+    rows: 15,
+    col: 20,
+    tiles: [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ]
+};
 
-// Define the three maps
-const map1 = [
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,3,3,3,3,3,3,3,3,3,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+
+// Define the three enemyMaps
+const enemyMaps = [
+    enemyMap1,
+    enemyMap2,
+    enemyMap3,
 ];
 
+const tileMaps = [
+    tileMap1,
+    tileMap2,
+    tileMap3,
+]
 
+const bg = {
+    1: "url(/images/bg-1.jpg)",
+    2: "url(/images/bg-2.jpeg)",
+    3: "url(/images/bg-3.jpg)",
+}
+
+const spriteNames = {
+    0: 'explosion', 1: 'greenAlien', 2: 'ufo', 3: 'asteroid1', 4: 'asteroid2', 5: 'asteroid3', 6: 'asteroid4', 7: 'jet1', 8: 'jet2', 9: 'rocket1', 10: 'rocket2'
+};
+
+const gameObjects = {
+    1: ['explosion', 'greenAlien', 'asteroid2', 'rocket1'],
+    2: ['explosion', 'jet1', 'asteroid1', 'jet2'],
+    3: ['explosion', 'ufo', 'asteroid3', 'rocket2'],
+}
+
+// Initialize the current enemy map and index
+let enemyMapIndex = 0
+let currentenemyMap = enemyMaps[enemyMapIndex]
+let currentTileMap = tileMaps[enemyMapIndex]
+let currentGameObjects = gameObjects[1];
+
+continueButton.addEventListener("click", resumeGame);
+restartButton.addEventListener("click", () => {
+    pauseMenu.style.display = "none";
+    startMenu.style.visibility = "visible"
+    isPaused = false
+});
+
+function startGame(mapNumber) {
+    currentGameObjects= gameObjects[mapNumber];
+
+    gameContainer.style.backgroundImage = bg[mapNumber];
+    gameContainer.style.backgroundSize = "cover";
+    // Start the game
+    initializeGame();
+    startMenu.style.visibility = "hidden";
+    gameLoop();
+}
 // Initialize the game
 function initializeGame() {
     // Clear the game container
-    while (gameContainer.firstChild) {
+    while (gameContainer.firstChild) {gameObjects
         gameContainer.removeChild(gameContainer.firstChild);
     }
 
@@ -85,10 +203,10 @@ function initializeGame() {
         speed: 5,
         alive: true,
     };
-    player.element.id = "player";
-    player.element.style.position = "absolute";
-    player.element.style.width = `${player.width}px`;
-    player.element.style.height = `${player.height}px`;
+    // player.element.id = "player";
+    player.element.className = 'sprite ' + currentGameObjects[3];
+    // player.element.classList.add('sprite');
+    // player.element.classList.add(spriteNames[8]);
     player.element.style.left = `${player.x}px`;
     player.element.style.top = `${player.y}px`;
     gameContainer.appendChild(player.element);
@@ -100,8 +218,10 @@ function initializeGame() {
     level = 1;
     score = 0;
     lives = 3;
-    shotCooldown = initialShotCooldown; 
+    shotCooldown = initialShotCooldown;
     enemySpeed = 1; // Reset enemy speed to initial value   
+
+    createTileGrid();
 
     // Initialize enemies
     initializeEnemies();
@@ -114,23 +234,44 @@ function initializeGame() {
     startTimer();
 }
 
+
+function createTileGrid() {
+    for (let y = 0; y < currentTileMap.rows; y++) {
+        for (let x = 0; x < currentTileMap.col; x++) {
+            if (currentTileMap.tiles[y][x] === 2) {
+                const tile = document.createElement("div");
+                tile.style.left = `${x * 40}px`;
+                tile.style.top = `${y * 40}px`;
+                tile.className = 'sprite ' + currentGameObjects[2];
+                gameContainer.appendChild(tile);
+            }
+        }
+    }
+}
+
+
 // Initialize enemies
 function initializeEnemies() {
-    for (let row = 0; row < enemyRows; row++) {
-        for (let col = 0; col < enemyColumns; col++) {
-            const enemy = document.createElement("div");
-            enemy.className = "enemy";
-            enemy.style.left = `${col * (enemyWidth + 10)}px`;
-            enemy.style.top = `${row * (enemyHeight + 10)}px`;
-            gameContainer.appendChild(enemy);
-            enemies.push({
-                element: enemy,
-                x: col * (enemyWidth + 10),
-                y: row * (enemyHeight + 10),
-                width: enemyWidth,
-                height: enemyHeight,
-                alive: true,
-            });
+    for (let row = 0; row < currentenemyMap.rows; row++) {
+        for (let col = 0; col < currentenemyMap.col; col++) {
+            if (currentenemyMap.tiles[row][col] === 3) {
+                const enemy = document.createElement("div");
+                enemy.className = 'sprite ' + currentGameObjects[1]
+                // enemy.classList.add('sprite');
+                // enemy.classList.add(spriteNames[2]);
+                enemy.style.left = `${col * (enemyWidth + 10)}px`;
+                enemy.style.top = `${row * (enemyHeight + 10)}px`;
+                gameContainer.appendChild(enemy);
+                enemies.push({
+                    element: enemy,
+                    x: col * (enemyWidth + 10),
+                    y: row * (enemyHeight + 10),
+                    width: enemyWidth,
+                    height: enemyHeight,
+                    alive: true,
+                });
+
+            }
         }
     }
 }
@@ -140,18 +281,20 @@ function movePlayer() {
     if (keys.ArrowLeft && player.x > 0) {
         player.x = Math.max(0, player.x - player.speed);
     }
-    if (keys.ArrowRight && player.x + player.width < gameContainer.clientWidth) {
-        player.x = Math.min(gameContainer.clientWidth - player.width, player.x + player.speed);
+    if (keys.ArrowRight && player.x + player.width < 800) {
+        player.x = Math.min(800 - player.width, player.x + player.speed);
     }
     player.element.style.left = `${player.x}px`;
 }
 
 // Shoot player bullet
-function playerShoot() {
-    const currentTime = Date.now();
+function playerShoot(timestamp) {
+    const currentTime = timestamp
     if (keys.Space && currentTime - lastShotTime >= shotCooldown) {
         const bullet = document.createElement("div");
         bullet.className = "bullet";
+        bullet.style.backgroundColor = "red"; // Player bullet color
+
         bullet.style.left = `${player.x + player.width / 2 - 2.5}px`;
         bullet.style.top = `${player.y - 10}px`;
         gameContainer.appendChild(bullet);
@@ -177,27 +320,29 @@ function updateBullets() {
 
         // Remove bullet if it goes off-screen
         if (bullet.y + bullet.height < 0) {
-            bullet.element.remove();
+            bullet.element.style.visibility = 'hidden';
             bullets.splice(index, 1);
         }
     });
 }
 
 // Update bullet colors
-function updateBulletColors() {
-    bullets.forEach((bullet) => {
-        bullet.element.style.backgroundColor = "red"; // Player bullet color
-    });
+// function updateBulletColors() {
+//     bullets.forEach((bullet) => {
+//         bullet.element.style.backgroundColor = "red"; // Player bullet color
+//     });
 
-    enemyBullets.forEach((bullet) => {
-        bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
-    });
-}
+//     enemyBullets.forEach((bullet) => {
+//         bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
+//     });
+// }
 
 // Shoot enemy bullets
 function shootEnemyBullet(enemy) {
     const enemyBullet = document.createElement("div");
     enemyBullet.className = "bullet";
+    enemyBullet.style.backgroundColor = "yellow"; // Player bullet color
+
     enemyBullet.style.left = `${enemy.x + enemy.width / 2 - 2.5}px`;
     enemyBullet.style.top = `${enemy.y + enemy.height}px`;
     gameContainer.appendChild(enemyBullet);
@@ -232,7 +377,7 @@ function triggerExplosion(x, y) {
         existingExplosion.remove();
     }
     const explosion = document.createElement("div");
-    explosion.className = "explosion";
+    explosion.className = "sprite explosion";
     explosion.style.left = `${x}px`;
     explosion.style.top = `${y}px`;
     gameContainer.appendChild(explosion);
@@ -242,9 +387,9 @@ function triggerExplosion(x, y) {
 
 // Update the sidebar
 function updateSidebar() {
-   levelDisplay.textContent = level;
-   scoreDisplay.textContent = score;
-   livesDisplay.textContent = lives;
+    levelDisplay.textContent = level;
+    scoreDisplay.textContent = score;
+    livesDisplay.textContent = lives;
 }
 
 // Restart the game
@@ -295,8 +440,10 @@ function checkBulletCollisions() {
                     (playerBullet.y + enemyBullet.y) / 2
                 );
 
-                playerBullet.element.remove();
-                enemyBullet.element.remove();
+                // playerBullet.element.remove();
+                playerBullet.element.style.visibility = 'hidden';
+                // enemyBullet.element.remove();
+                enemyBullet.element.style.visibility = 'hidden';
                 bullets.splice(playerBulletIndex, 1);
                 enemyBullets.splice(enemyBulletIndex, 1);
             }
@@ -312,9 +459,11 @@ function checkPlayerBulletCollisions() {
             ) {
                 triggerExplosion(enemy.x, enemy.y);
                 enemy.alive = false;
-                enemy.element.remove();
+                enemy.element.style.visibility = 'hidden';
                 bullets.splice(bulletIndex, 1);
-                bullet.element.remove();
+                // bullet.element.remove();
+                bullet.element.style.visibility = 'hidden';
+
 
                 score += 50;
                 updateSidebar();
@@ -329,13 +478,19 @@ function checkPlayerBulletCollisions() {
 
 // Level up
 function levelUp() {
-  level++;
-  enemyShootInterval = Math.max(200, enemyShootInterval - 100);
-  enemySpeed += 0.5; // Increase enemy speed
-  shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
-
-  initializeEnemies();
-  updateSidebar();
+    level++;
+    enemyMapIndex++;
+    if (enemyMapIndex === enemyMaps.length) {
+        enemyMapIndex = 0;
+    }
+    currentenemyMap = enemyMaps[enemyMapIndex];
+    currentTileMap = tileMaps[enemyMapIndex];
+    enemyShootInterval = Math.max(200, enemyShootInterval - 100);
+    enemySpeed += 0.5; // Increase enemy speed
+    shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
+    createTileGrid();
+    initializeEnemies();
+    updateSidebar();
 }
 
 function checkEnemyBulletCollisions() {
@@ -347,11 +502,11 @@ function checkEnemyBulletCollisions() {
             player.alive = false;
 
             // Remove the player's image
-            player.element.remove();
+            // player.element.remove();
 
             // Remove the enemy bullet
             enemyBullets.splice(bulletIndex, 1);
-            bullet.element.remove();
+            bullet.element.style.visibility = 'hidden';
             hitSound.play();
 
             // Decrease lives
@@ -361,24 +516,35 @@ function checkEnemyBulletCollisions() {
             // End game if no lives left
             if (lives === 0) {
                 gameOver = true;
+                player.element.style.visibility = 'hidden';
                 triggerExplosion(player.x, player.y)
             } else {
                 // Reset player position if lives remain
                 player.alive = true;
-                player.element = document.createElement("div");
-                player.element.id = "player"
-                player.element.className = "player";
-                player.element.style.left = `${player.x}px`;
-                player.element.style.top = `${player.y}px`;
-                player.element.style.backgroundImage = "url('images/player.png')";
-                gameContainer.appendChild(player.element);
+                // player.element = document.createElement("div");
+                // player.element.classList.add('sprite');
+                // player.element.classList.add(spriteNames[8]);
+                // player.element.style.left = `${player.x}px`;
+                // player.element.style.top = `${player.y}px`;
+                // gameContainer.appendChild(player.element);
                 hitSound.play();
             }
         }
     });
 }
 
-function gameLoop() {
+function yieldToMain() {
+    if (globalThis.scheduler?.yield) {
+        return scheduler.yield();
+    }
+
+    // Fall back to yielding with setTimeout.
+    return new Promise(resolve => {
+        setTimeout(resolve, 0);
+    });
+}
+
+function gameLoop(timestamp) {
     if (gameOver) {
         gameOverMessage.style.display = "block";
         stopTimer();
@@ -389,19 +555,20 @@ function gameLoop() {
     if (isPaused) {
         return;
     }
-    
+
     movePlayer();
-    playerShoot();
+    playerShoot(timestamp);
+    yieldToMain();
     updateBullets();
     updateEnemyBullets();
     updateEnemies();
-    updateBulletColors();
+    // updateBulletColors();
 
     checkPlayerBulletCollisions();
     checkEnemyBulletCollisions();
     checkBulletCollisions();
 
-    const now = Date.now();
+    const now = timestamp
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
         if (aliveEnemies.length > 0) {
@@ -416,29 +583,29 @@ function gameLoop() {
 
 // Update enemies
 function updateEnemies() {
-  let edgeReached = false;
-  enemies.forEach((enemy) => {
-    if (enemy.alive) {
-      enemy.x += enemySpeed * enemyDirection;
-      enemy.element.style.left = `${enemy.x}px`;
-
-      if (enemy.x + enemy.width > 800 || enemy.x < 0) {
-        edgeReached = true;
-      }
-
-      if (enemy.y + enemy.height >= player.y) {
-        gameOver = true;
-      }
-    }
-  });
-
-  if (edgeReached) {
-    enemyDirection *= -1;
+    let edgeReached = false;
     enemies.forEach((enemy) => {
-      enemy.y += enemyHeight;
-      enemy.element.style.top = `${enemy.y}px`;
+        if (enemy.alive) {
+            enemy.x += enemySpeed * enemyDirection;
+            enemy.element.style.left = `${enemy.x}px`;
+
+            if (enemy.x + enemy.width > 800 || enemy.x < 0) {
+                edgeReached = true;
+            }
+
+            if (enemy.y + enemy.height >= player.y) {
+                gameOver = true;
+            }
+        }
     });
-  }
+
+    if (edgeReached) {
+        enemyDirection *= -1;
+        enemies.forEach((enemy) => {
+            enemy.y += enemyHeight;
+            enemy.element.style.top = `${enemy.y}px`;
+        });
+    }
 }
 
 let isPaused = false;
@@ -491,7 +658,9 @@ document.addEventListener("keydown", (e) => {
         keys.Space = true;
     } else if (e.key === "Enter" && gameOver) {
         // Restart the game when Enter is pressed after game over
-        restartGame();
+        gameOverMessage.style.display = "none";
+        startMenu.style.visibility = "visible"
+        // restartGame();
     } else if (e.key === "p" || e.key === "P") {
         if (isPaused) {
             resumeGame();
@@ -499,7 +668,11 @@ document.addEventListener("keydown", (e) => {
             pauseGame();
         }
     } else if ((e.key === "r" || e.key === "R") && isPaused) {
-        restartGame();
+        // restartGame();
+        pauseMenu.style.display = "none";
+        startMenu.style.visibility = "visible"
+        isPaused = false
+
     }
 });
 
@@ -513,6 +686,8 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-// Start the game
-initializeGame();
-gameLoop();
+// Attach event listeners to map buttons
+document.getElementById("map1Button").addEventListener("click", () => startGame(1));
+document.getElementById("map2Button").addEventListener("click", () => startGame(2));
+document.getElementById("map3Button").addEventListener("click", () => startGame(3));
+

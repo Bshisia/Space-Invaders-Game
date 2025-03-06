@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Orbitron', sans-serif;
     height: 100vh;
     overflow: hidden;
-    font-family: 'Arial', sans-serif;
-    background-image: url(/images/BG.jpeg);
+    /* background-image: url("/images/BG.jpeg"); */
 
 }
 
@@ -19,7 +21,7 @@ body {
         background-position: 1000px 1000px;
     }
 }
-
+/* 
 body::before {
     content: '';
     position: absolute;
@@ -31,7 +33,7 @@ body::before {
     animation: stars 100s linear infinite;
     opacity: 0.5;
     z-index: -1;
-}
+} */
 
 #gameContainer {
     position: relative;
@@ -42,9 +44,13 @@ body::before {
     overflow: hidden;
 }
 
+/* sidebar */
+
 #sidebar {
     width: 200px;
     height: 600px;
+    font-family: 'Orbitron', sans-serif;
+
     background: linear-gradient(135deg, #1e1e2f, #2a2a40);
     color: #fff;
     padding: 20px;
@@ -63,13 +69,30 @@ body::before {
     padding-top: 30px;
 }
 
-#player {
+
+/* sprites */
+
+.sprite {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url("/images/player.png");
+    background-image: url("/images/spritesheet-x2.png");
     background-size: cover;
-    background-position: center;
+}
+
+.greenAlien {background-position: 0px 0px;}
+.ufo {background-position: -40px 0px;}
+.asteroid1 {background-position: -80px 0px;}
+.asteroid2 {background-position: -120px 0px;}
+.asteroid3 {background-position: -160px 0px}
+.asteroid4{background-position: -200px 0px}
+.jet1 {background-position: -240px 0px}
+.explosion {background-position: -280px 0px;  opacity: 0.8; animation: explode 0.5s ease-out;}
+.jet2 {background-position: -320px 0px;}
+.rocket1 {background-position: -360px 0px;}
+.rocket2 {background-position: -390px 0px;}
+
+.float {
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
@@ -88,22 +111,13 @@ body::before {
     }
 }
 
-.enemy {
-    position: absolute;
-    width: 30px;
-    height: 50px;
-    background-image: url("/images/enemy.png");
-    background-size: cover;
-    background-position: center;
-}
-
 .bullet {
     position: absolute;
     width: 5px;
     height: 10px;
-    background-color: #ff4444;
-    box-shadow: 0 0 10px #ff4444;
-    animation: pulse 0.5s infinite alternate;
+    /* background-color: #ff4444; */
+    /* box-shadow: 0 0 10px #ff4444; */
+    /* animation: pulse 0.5s infinite alternate; */
 }
 
 @keyframes pulse {
@@ -116,7 +130,7 @@ body::before {
     }
 }
 
-#gameOver {
+#gameOver, #pauseMenu {
     display: none;
     position: absolute;
     top: 50%;
@@ -131,8 +145,8 @@ body::before {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#pauseMenu {
-    display: none;
+.start-menu {
+    display: "block";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -144,9 +158,9 @@ body::before {
     border: 2px solid #444;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  }
+}
 
-#pauseMenu button {
+#pauseMenu button, .start-menu button {
     margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
@@ -160,16 +174,6 @@ body::before {
 
   #pauseMenu button:hover {
     background: linear-gradient(135deg, #666, #888);
-  }
-
-  .explosion {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background-image: url("/images/explosion.png");
-    background-size: cover;
-    opacity: 0.8;
-    animation: explode 0.5s ease-out;
   }
 
   @keyframes explode {
