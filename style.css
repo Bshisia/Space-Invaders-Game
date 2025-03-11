@@ -62,7 +62,7 @@ body {
 .explosion {position:absolute; background-position: -280px 0px;  opacity: 0.8; animation: explode 0.5s ease-out;}
 .jet2 {background-position: -320px 0px;}
 .rocket1 {background-position: -360px 0px;}
-.rocket2 {background-position: -390px 0px;}
+.rocket2 {background-position: -400px 0px;}
 
 
 .bullet {

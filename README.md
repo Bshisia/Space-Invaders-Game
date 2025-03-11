@@ -1,9 +1,10 @@
-# Space Invaders Clone
+# Space Invaders Different Maps
 
 This is a simple Space Invaders-style game implemented in JavaScript. Players control a spaceship to defend against waves of alien invaders.
 
 ## Features
 
+- Different maps
 - Player-controlled spaceship
 - Multiple levels with increasing difficulty
 - Score tracking
@@ -31,6 +32,7 @@ This is a simple Space Invaders-style game implemented in JavaScript. Players co
 
 ## Game Mechanics
 
+- Choose a map
 - Player starts with 3 lives.
 - Each alien destroyed awards 50 points.
 - Enemy speed and shooting frequency increase with each level.
@@ -54,8 +56,6 @@ This game uses vanilla JavaScript and doesn't require any external libraries or 
 
 ## Future Improvements
 
-- Add sound effects and background music
-- Implement different types of enemies
 - Add power-ups and special weapons
 - Create a high score system
 - Improve graphics and animations
