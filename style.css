@@ -8,17 +8,8 @@ body {
     font-family: 'Orbitron', sans-serif;
     height: 100vh;
     overflow: hidden;
-    background-color: #43435a;
-}
-
-@keyframes stars {
-    0% {
-        background-position: 0 0;
-    }
-
-    100% {
-        background-position: 1000px 1000px;
-    }
+    background-color: #0f0f4d;
+    /* background-color: #43435a; */
 }
 
 #gameContainer {
@@ -27,13 +18,16 @@ body {
     height: 600px;
     overflow: hidden;
     border: 2px solid #444;
+    background-color: #4545c2;
 }
 
 /* sidebar */
 #sidebar {
     width: 200px;
     height: 600px;
-    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+    background-color: #111152;
+
+    /* background: linear-gradient(135deg, #1e1e2f, #2a2a40); */
     color: #fff;
     padding: 20px;
     box-sizing: border-box;
@@ -79,21 +73,11 @@ body {
     will-change: transform;
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.2);
-    }
-}
-
 #gameOver, #pauseMenu {
     display: none;
     position: absolute;
     transform: translate(0, 0);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(22, 15, 114, 0.8);
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -105,7 +89,7 @@ body {
     display: block;
     position: absolute;
     transform: translate(0%, 0%);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(1, 6, 48, 0.8);
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -119,7 +103,7 @@ body {
     font-family: 'Orbitron';
     font-size: 16px;
     cursor: pointer;
-    background: linear-gradient(135deg, #444, #666);
+    background-color: #18991f;
     color: #fff;
     border: none;
     border-radius: 5px;
