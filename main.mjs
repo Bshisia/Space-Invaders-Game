@@ -153,10 +153,6 @@ const bg = {
     3: "url(/images/bg-3.jpg)",
 }
 
-const spriteNames = {
-    0: 'explosion', 1: 'greenAlien', 2: 'ufo', 3: 'asteroid1', 4: 'asteroid2', 5: 'asteroid3', 6: 'asteroid4', 7: 'jet1', 8: 'jet2', 9: 'rocket1', 10: 'rocket2'
-};
-
 const gameObjects = {
     1: ['explosion', 'greenAlien', 'asteroid2', 'rocket1'],
     2: ['explosion', 'jet1', 'asteroid1', 'jet2'],
@@ -203,12 +199,8 @@ function initializeGame() {
         speed: 5,
         alive: true,
     };
-    // player.element.id = "player";
     player.element.className = 'sprite ' + currentGameObjects[3];
-    // player.element.classList.add('sprite');
-    // player.element.classList.add(spriteNames[8]);
-    player.element.style.left = `${player.x}px`;
-    player.element.style.top = `${player.y}px`;
+    player.element.style.transform = `translate(${player.x}px, ${player.y}px)`;
     gameContainer.appendChild(player.element);
 
     bullets = [];
@@ -240,9 +232,8 @@ function createTileGrid() {
         for (let x = 0; x < currentTileMap.col; x++) {
             if (currentTileMap.tiles[y][x] === 2) {
                 const tile = document.createElement("div");
-                tile.style.left = `${x * 40}px`;
-                tile.style.top = `${y * 40}px`;
                 tile.className = 'sprite ' + currentGameObjects[2];
+                tile.style.transform = `translate(${x * 40}px, ${y * 40}px)`;
                 gameContainer.appendChild(tile);
             }
         }
@@ -257,10 +248,8 @@ function initializeEnemies() {
             if (currentenemyMap.tiles[row][col] === 3) {
                 const enemy = document.createElement("div");
                 enemy.className = 'sprite ' + currentGameObjects[1]
-                // enemy.classList.add('sprite');
-                // enemy.classList.add(spriteNames[2]);
-                enemy.style.left = `${col * (enemyWidth + 10)}px`;
-                enemy.style.top = `${row * (enemyHeight + 10)}px`;
+                enemy.style.transform = `translate(${col * (enemyWidth+10)}px, ${row * (enemyHeight + 10)}px)`;
+
                 gameContainer.appendChild(enemy);
                 enemies.push({
                     element: enemy,
@@ -270,7 +259,6 @@ function initializeEnemies() {
                     height: enemyHeight,
                     alive: true,
                 });
-
             }
         }
     }
@@ -284,7 +272,7 @@ function movePlayer() {
     if (keys.ArrowRight && player.x + player.width < 800) {
         player.x = Math.min(800 - player.width, player.x + player.speed);
     }
-    player.element.style.left = `${player.x}px`;
+    player.element.style.transform = `translate(${player.x}px, ${player.y}px)`;
 }
 
 // Shoot player bullet
@@ -294,9 +282,7 @@ function playerShoot(timestamp) {
         const bullet = document.createElement("div");
         bullet.className = "bullet";
         bullet.style.backgroundColor = "red"; // Player bullet color
-
-        bullet.style.left = `${player.x + player.width / 2 - 2.5}px`;
-        bullet.style.top = `${player.y - 10}px`;
+        bullet.style.transform = `translate(${player.x + player.width / 2 - 2.5}px, ${player.y - 10}px)`;
         gameContainer.appendChild(bullet);
 
         bullets.push({
@@ -316,7 +302,7 @@ function playerShoot(timestamp) {
 function updateBullets() {
     bullets.forEach((bullet, index) => {
         bullet.y -= bullet.speed;
-        bullet.element.style.top = `${bullet.y}px`;
+        bullet.element.style.transform = `translate(${bullet.x}px, ${bullet.y}px)`;
 
         // Remove bullet if it goes off-screen
         if (bullet.y + bullet.height < 0) {
@@ -326,25 +312,12 @@ function updateBullets() {
     });
 }
 
-// Update bullet colors
-// function updateBulletColors() {
-//     bullets.forEach((bullet) => {
-//         bullet.element.style.backgroundColor = "red"; // Player bullet color
-//     });
-
-//     enemyBullets.forEach((bullet) => {
-//         bullet.element.style.backgroundColor = "yellow"; // Enemy bullet color
-//     });
-// }
-
 // Shoot enemy bullets
 function shootEnemyBullet(enemy) {
     const enemyBullet = document.createElement("div");
     enemyBullet.className = "bullet";
     enemyBullet.style.backgroundColor = "yellow"; // Player bullet color
-
-    enemyBullet.style.left = `${enemy.x + enemy.width / 2 - 2.5}px`;
-    enemyBullet.style.top = `${enemy.y + enemy.height}px`;
+    enemyBullet.style.transform = `translate(${enemy.x + enemy.width / 2 - 2.5}px, ${enemy.y + enemy.height}px)`;
     gameContainer.appendChild(enemyBullet);
     enemyBullets.push({
         element: enemyBullet,
@@ -361,11 +334,11 @@ function shootEnemyBullet(enemy) {
 function updateEnemyBullets() {
     enemyBullets.forEach((enemyBullet, index) => {
         enemyBullet.y += enemyBullet.speed
-        enemyBullet.element.style.top = `${enemyBullet.y}px`;
+        enemyBullet.element.style.transform = `translate(${enemyBullet.x}px, ${enemyBullet.y}px)`;
 
         // Remove bullet if it goes off-screen
         if (enemyBullet.y > 600) {
-            enemyBullet.element.remove();
+            enemyBullet.element.style.visibility = 'hidden';
             enemyBullets.splice(index, 1);
         }
     })
@@ -393,30 +366,30 @@ function updateSidebar() {
 }
 
 // Restart the game
-function restartGame() {
-    isPaused = false;
-    pauseMenu.style.display = "none";
-    gameOverMessage.style.display = "none";
+// function restartGame() {
+//     isPaused = false;
+//     pauseMenu.style.display = "none";
+//     gameOverMessage.style.display = "none";
 
-    while (gameContainer.firstChild) {
-        gameContainer.removeChild(gameContainer.firstChild);
-    }
+//     while (gameContainer.firstChild) {
+//         gameContainer.removeChild(gameContainer.firstChild);
+//     }
 
-    player = null;
-    bullets = [];
-    enemyBullets = [];
-    gameOver = false;
-    level = 1;
-    score = 0;
-    lives = 3;
+//     player = null;
+//     bullets = [];
+//     enemyBullets = [];
+//     gameOver = false;
+//     level = 1;
+//     score = 0;
+//     lives = 3;
 
-    levelDisplay.textContent = level;
-    scoreDisplay.textContent = score;
-    livesDisplay.textContent = lives;
+//     levelDisplay.textContent = level;
+//     scoreDisplay.textContent = score;
+//     livesDisplay.textContent = lives;
 
-    initializeGame();
-    gameLoop();
-}
+//     initializeGame();
+//     gameLoop();
+// }
 
 // checks whether two objects are colliding
 function hasCollided(obj1, obj2) {
@@ -461,7 +434,6 @@ function checkPlayerBulletCollisions() {
                 enemy.alive = false;
                 enemy.element.style.visibility = 'hidden';
                 bullets.splice(bulletIndex, 1);
-                // bullet.element.remove();
                 bullet.element.style.visibility = 'hidden';
 
 
@@ -501,9 +473,6 @@ function checkEnemyBulletCollisions() {
             // Player hit!
             player.alive = false;
 
-            // Remove the player's image
-            // player.element.remove();
-
             // Remove the enemy bullet
             enemyBullets.splice(bulletIndex, 1);
             bullet.element.style.visibility = 'hidden';
@@ -521,12 +490,6 @@ function checkEnemyBulletCollisions() {
             } else {
                 // Reset player position if lives remain
                 player.alive = true;
-                // player.element = document.createElement("div");
-                // player.element.classList.add('sprite');
-                // player.element.classList.add(spriteNames[8]);
-                // player.element.style.left = `${player.x}px`;
-                // player.element.style.top = `${player.y}px`;
-                // gameContainer.appendChild(player.element);
                 hitSound.play();
             }
         }
@@ -581,13 +544,12 @@ function gameLoop(timestamp) {
     requestAnimationFrame(gameLoop);
 }
 
-// Update enemies
+// Move enemies left, right and downwards towards player
 function updateEnemies() {
     let edgeReached = false;
     enemies.forEach((enemy) => {
         if (enemy.alive) {
             enemy.x += enemySpeed * enemyDirection;
-            enemy.element.style.left = `${enemy.x}px`;
 
             if (enemy.x + enemy.width > 800 || enemy.x < 0) {
                 edgeReached = true;
@@ -599,13 +561,21 @@ function updateEnemies() {
         }
     });
 
+    // If an edge is reached, move all enemies down and change direction
     if (edgeReached) {
         enemyDirection *= -1;
         enemies.forEach((enemy) => {
             enemy.y += enemyHeight;
-            enemy.element.style.top = `${enemy.y}px`;
         });
     }
+
+    // Update positions for all enemies
+    enemies.forEach((enemy) => {
+        if (enemy.alive) {
+            enemy.element.style.transform = `translate(${enemy.x}px,${enemy.y}px)`;
+        }
+        console.log(enemy.element)
+    });
 }
 
 let isPaused = false;
@@ -660,19 +630,16 @@ document.addEventListener("keydown", (e) => {
         // Restart the game when Enter is pressed after game over
         gameOverMessage.style.display = "none";
         startMenu.style.visibility = "visible"
-        // restartGame();
-    } else if (e.key === "p" || e.key === "P") {
-        if (isPaused) {
-            resumeGame();
-        } else {
-            pauseGame();
-        }
+    } else if ((e.key === "p" || e.key === "P") && !gameOver && startTime !== null) {
+            if (isPaused) {
+                resumeGame();
+            } else {
+                pauseGame();
+            }
     } else if ((e.key === "r" || e.key === "R") && isPaused) {
-        // restartGame();
         pauseMenu.style.display = "none";
         startMenu.style.visibility = "visible"
         isPaused = false
-
     }
 });
 
