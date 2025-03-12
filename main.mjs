@@ -173,6 +173,9 @@ restartButton.addEventListener("click", () => {
 });
 
 function startGame(mapNumber) {
+    enemyMapIndex = 0
+    currentenemyMap = enemyMaps[enemyMapIndex]
+    currentTileMap = tileMaps[enemyMapIndex]
     currentGameObjects= gameObjects[mapNumber];
 
     gameContainer.style.backgroundImage = bg[mapNumber];
