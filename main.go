@@ -80,7 +80,10 @@ func addScore(w http.ResponseWriter, r *http.Request) {
 func main() {
     loadScores()
 
- 
+    http.Handle("/", http.FileServer(http.Dir(".")))
+    http.HandleFunc("/api/scores", getScores)
+    http.HandleFunc("/api/scores/add", addScore)
+
     log.Println("Listening on :8080...")
     err := http.ListenAndServe(":8080", nil)
     if err != nil {
