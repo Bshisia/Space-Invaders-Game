@@ -40,10 +40,20 @@ func loadScores() {
     }
 }
 
+
+func getScores(w http.ResponseWriter, r *http.Request) {
+    mu.Lock()
+    defer mu.Unlock()
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(scores)
+}
+
+
 func main() {
     loadScores()
 
-   
+ 
     log.Println("Listening on :8080...")
     err := http.ListenAndServe(":8080", nil)
     if err != nil {
