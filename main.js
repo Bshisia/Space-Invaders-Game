@@ -689,4 +689,19 @@ function displayScoreboard() {
     });
 
     scoreboard.style.display = "block";
+
+    // Send the score to the Go API
+    fetch('/api/scores/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: "Player1", score: score, time: elapsedTime })
+    }).then(response => {
+        if (!response.ok) {
+            console.error('Failed to save score');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
 }
