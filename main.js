@@ -14,6 +14,7 @@ const startMenu = document.querySelector(".start-menu");
 
 // Game variables
 let player;
+let playerName = "";
 let score = 0; // Track the player's score
 let lives = 3; // Track the player's lives
 let level = 1; // Track the current level
@@ -173,6 +174,10 @@ restartButton.addEventListener("click", () => {
 });
 
 function startGame(mapNumber) {
+    // Get the player name from the input field
+    const playerNameInput = document.getElementById("playerName");
+    playerName = playerNameInput.value.trim() || "Player1"; // Use "Player1" as default if empty
+    
     enemyMapIndex = 0
     currentenemyMap = enemyMaps[enemyMapIndex]
     currentTileMap = tileMaps[enemyMapIndex]
@@ -188,6 +193,7 @@ function startGame(mapNumber) {
     startMenu.style.visibility = "hidden";
     gameLoop();
 }
+
 // Initialize the game
 function initializeGame() {
     // Clear the game container
@@ -671,9 +677,9 @@ function displayScoreboard() {
     // Clear existing rows
     tableBody.innerHTML = "";
 
-    // Add new rows (example data)
+    // Add new rows with the player's name
     const scores = [
-        { rank: 1, name: "Player1", score: score, time: elapsedTime },
+        { rank: 1, name: playerName, score: score, time: elapsedTime },
         // Add more scores as needed
     ];
 
@@ -690,13 +696,13 @@ function displayScoreboard() {
 
     scoreboard.style.display = "block";
 
-    // Send the score to the Go API
+    // Send the score to the Go API with the player's name
     fetch('/api/scores/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: "Player1", score: score, time: elapsedTime })
+        body: JSON.stringify({ name: playerName, score: score, time: elapsedTime })
     }).then(response => {
         if (!response.ok) {
             console.error('Failed to save score');
