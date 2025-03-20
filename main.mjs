@@ -180,6 +180,9 @@ function startGame(mapNumber) {
 
     gameContainer.style.backgroundImage = bg[mapNumber];
     gameContainer.style.backgroundSize = "cover";
+
+    const scoreboard = document.querySelector(".scoreboard");
+    scoreboard.style.display = "none";
     // Start the game
     initializeGame();
     startMenu.style.visibility = "hidden";
@@ -512,9 +515,9 @@ function yieldToMain() {
 
 function gameLoop(timestamp) {
     if (gameOver) {
-        gameOverMessage.style.display = "block";
         stopTimer();
         gameOverSound.play();
+        displayScoreboard();
         return;
     }
 
@@ -661,3 +664,29 @@ document.getElementById("map1Button").addEventListener("click", () => startGame(
 document.getElementById("map2Button").addEventListener("click", () => startGame(2));
 document.getElementById("map3Button").addEventListener("click", () => startGame(3));
 
+function displayScoreboard() {
+    const scoreboard = document.querySelector(".scoreboard");
+    const tableBody = scoreboard.querySelector("table tbody");
+
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    // Add new rows (example data)
+    const scores = [
+        { rank: 1, name: "Player1", score: score, time: elapsedTime },
+        // Add more scores as needed
+    ];
+
+    scores.forEach((entry) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${entry.rank}</td>
+            <td>${entry.name}</td>
+            <td>${entry.score}</td>
+            <td>${entry.time}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    scoreboard.style.display = "block";
+}
