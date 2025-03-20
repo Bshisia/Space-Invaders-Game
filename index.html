@@ -8,8 +8,7 @@
 </head>
 <body>
     <h1>Welcome to Space Invaders</h1>
-    <div id="gameContainer">
-    </div>
+    <div id="gameContainer"></div>
     <div id="sidebar">
         <h2>Level: <span id="levelDisplay">1</span></h2>
         <h2>Score: <span id="scoreDisplay">0</span></h2>
@@ -44,25 +43,23 @@
 
     <div id="gameOver"></div>
     <div class="start-menu">
-        <h1>Space Invaders</h1>
         <h2>Choose a Map:</h2>
-        <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+        <input type="text" id="playerName" placeholder="Enter your name" maxlength="20"><br>
         <button id="map1Button">Map 1</button>
         <button id="map2Button">Map 2</button>
         <button id="map3Button">Map 3</button>
     </div>
 
     <!-- Pause Menu -->
-     <div id="pauseMenu">
+    <div id="pauseMenu">
         <h2>PAUSED</h2>
         <button id="continueButton">Continue</button>
         <button id="restartButton">Restart</button>
-     </div>
-     <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
-     <audio id="shootSound" src="sounds/shoot.mp3"></audio>  
-     <audio id="gameOverSound" src="/sounds/gameover.mp3"></audio>
-     <audio id="hitSound" src="/sounds/hit.mp3"></audio>   
-    <script type="module" src="main.mjs"></script>
-
+    </div>
+    <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
+    <audio id="shootSound" src="sounds/shoot.mp3"></audio>  
+    <audio id="gameOverSound" src="/sounds/gameover.mp3"></audio>
+    <audio id="hitSound" src="/sounds/hit.mp3"></audio>   
+    <script src="main.js"></script>
 </body>
 </html>
