@@ -196,3 +196,29 @@ h1 {
   border-bottom: 2px solid #444;
   z-index: 10;
 }
+
+.current-player {
+  background-color: rgba(255, 255, 0, 0.2);
+  font-weight: bold;
+}
+
+.pagination {
+  margin-top: 15px; /* Adds space between the table and pagination */
+  text-align: center; /* Centers the pagination buttons */
+}
+
+.pagination button {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #0b9812d4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #555; /* Grey out disabled buttons */
+  cursor: not-allowed;
+}
