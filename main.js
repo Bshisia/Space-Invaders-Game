@@ -676,37 +676,55 @@ function displayScoreboard() {
 
     // Clear existing rows
     tableBody.innerHTML = "";
-
-    // Add new rows with the player's name
-    const scores = [
-        { rank: 1, name: playerName, score: score, time: elapsedTime },
-        // Add more scores as needed
-    ];
-
-    scores.forEach((entry) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${entry.rank}</td>
-            <td>${entry.name}</td>
-            <td>${entry.score}</td>
-            <td>${entry.time}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-
-    scoreboard.style.display = "block";
-
-    // Send the score to the Go API with the player's name
+    
+    // First add the current player's score
+    const currentPlayerScore = {
+        name: playerName,
+        score: score,
+        time: elapsedTime
+    };
+    
+    // Send the current score to the API
     fetch('/api/scores/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: playerName, score: score, time: elapsedTime })
+        body: JSON.stringify(currentPlayerScore)
     }).then(response => {
         if (!response.ok) {
             console.error('Failed to save score');
         }
+        
+        // After saving the score, fetch all scores
+        return fetch('/api/scores');
+    }).then(response => response.json())
+    .then(allScores => {
+        // Sort scores by score (highest first)
+        allScores.sort((a, b) => b.score - a.score);
+        
+        // Add all scores to the table
+        allScores.forEach((entry, index) => {
+            const row = document.createElement("tr");
+            // Highlight the current player's score
+            const isCurrentPlayer = entry.name === playerName && 
+                                  entry.score === score && 
+                                  entry.time === elapsedTime;
+            
+            if (isCurrentPlayer) {
+                row.className = "current-player";
+            }
+            
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${entry.name}</td>
+                <td>${entry.score}</td>
+                <td>${entry.time}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        
+        scoreboard.style.display = "block";
     }).catch(error => {
         console.error('Error:', error);
     });
