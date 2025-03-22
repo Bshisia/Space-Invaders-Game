@@ -624,8 +624,10 @@ function pauseGame() {
 function resumeGame() {
     isPaused = false;
     pauseMenu.style.display = "none";
-    // Restart the timer
-    startTimer();
+    
+    if (!gameOver) {
+        startTimer()
+    }
     gameLoop();
 }
 
