@@ -41,7 +41,7 @@ func loadScores() {
 }
 
 func saveScores() {
-    bytes, err := json.Marshal(scores)
+    bytes, err := json.MarshalIndent(scores, "", "    ") 
     if err != nil {
         log.Fatal(err)
     }
@@ -51,6 +51,7 @@ func saveScores() {
         log.Fatal(err)
     }
 }
+
 
 func getScores(w http.ResponseWriter, r *http.Request) {
     mu.Lock()
