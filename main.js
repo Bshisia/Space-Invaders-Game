@@ -174,10 +174,6 @@ restartButton.addEventListener("click", () => {
 });
 
 function startGame(mapNumber) {
-    // Get the player name from the input field
-    const playerNameInput = document.getElementById("playerName");
-    playerName = playerNameInput.value.trim() || "Player1"; // Use "Player1" as default if empty
-    
     enemyMapIndex = 0
     currentenemyMap = enemyMaps[enemyMapIndex]
     currentTileMap = tileMaps[enemyMapIndex]
@@ -523,7 +519,7 @@ function gameLoop(timestamp) {
     if (gameOver) {
         stopTimer();
         gameOverSound.play();
-        displayScoreboard();
+        displayScoreboard(); // Request player name before submitting score
         return;
     }
 
@@ -537,13 +533,12 @@ function gameLoop(timestamp) {
     updateBullets();
     updateEnemyBullets();
     updateEnemies();
-    // updateBulletColors();
 
     checkPlayerBulletCollisions();
     checkEnemyBulletCollisions();
     checkBulletCollisions();
 
-    const now = timestamp
+    const now = timestamp;
     if (now - lastEnemyShootTime > enemyShootInterval) {
         const aliveEnemies = enemies.filter((enemy) => enemy.alive);
         if (aliveEnemies.length > 0) {
@@ -551,10 +546,11 @@ function gameLoop(timestamp) {
             shootEnemyBullet(randomEnemy);
             lastEnemyShootTime = now;
         }
-
     }
+
     requestAnimationFrame(gameLoop);
 }
+
 
 // Move enemies left, right and downwards towards player
 function updateEnemies() {
@@ -683,110 +679,85 @@ let currentPage = 1; // Moved outside to persist state
 
 function displayScoreboard() {
     const scoreboard = document.querySelector(".scoreboard");
-    if (!scoreboard) {
-        console.error("Scoreboard element not found!");
+    const nameInput = document.getElementById("scoreNameInput");
+    const submitButton = document.getElementById("submitScoreButton");
+
+    if (!scoreboard || !nameInput || !submitButton) {
+        console.error("Scoreboard elements not found!");
         return;
     }
 
-    const tableBody = scoreboard.querySelector("table tbody");
-    const scoresPerPage = 5; 
-    let allScores = [];
+    // Show the scoreboard and ask for player's name
+    scoreboard.style.display = "block";
 
-    tableBody.innerHTML = ""; // Clear existing rows
+    // Ensure previous event listener is removed before adding a new one
+    submitButton.onclick = () => submitScore(nameInput.value);
+}
+
+// Function to submit score and update scoreboard
+function submitScore(playerName) {
+    if (!playerName.trim()) {
+        alert("Please enter a valid name!");
+        return;
+    }
 
     const currentPlayerScore = {
-        name: playerName,
+        name: playerName.trim(),
         score: score,
         time: elapsedTime
     };
-
-    function createPaginationControls() {
-        const existingPagination = scoreboard.querySelector(".pagination");
-        if (existingPagination) existingPagination.remove();
-
-        const paginationDiv = document.createElement("div");
-        paginationDiv.className = "pagination";
-
-        const totalPages = Math.ceil(allScores.length / scoresPerPage);
-
-        const prevButton = document.createElement("button");
-        prevButton.textContent = "Previous";
-        prevButton.disabled = currentPage === 1;
-        prevButton.addEventListener("click", () => {
-            if (currentPage > 1) {
-                currentPage--;
-                displayPage(currentPage);
-            }
-        });
-
-        const pageInfo = document.createElement("span");
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-
-        const nextButton = document.createElement("button");
-        nextButton.textContent = "Next";
-        nextButton.disabled = currentPage === totalPages;
-        nextButton.addEventListener("click", () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                displayPage(currentPage);
-            }
-        });
-
-        paginationDiv.appendChild(prevButton);
-        paginationDiv.appendChild(pageInfo);
-        paginationDiv.appendChild(nextButton);
-        scoreboard.appendChild(paginationDiv);
-    }
-
-    function displayPage(page) {
-        tableBody.innerHTML = "";
-
-        const startIndex = (page - 1) * scoresPerPage;
-        const endIndex = Math.min(startIndex + scoresPerPage, allScores.length);
-
-        for (let i = startIndex; i < endIndex; i++) {
-            const entry = allScores[i];
-            const row = document.createElement("tr");
-
-            const isCurrentPlayer = entry.name === playerName && 
-                                    entry.score === score && 
-                                    entry.time === elapsedTime;
-
-            if (isCurrentPlayer) row.className = "current-player";
-
-            row.innerHTML = `
-                <td>${i + 1}</td>
-                <td>${entry.name}</td>
-                <td>${entry.score}</td>
-                <td>${entry.time}</td>
-            `;
-            tableBody.appendChild(row);
-        }
-
-        createPaginationControls(); // Ensure pagination updates correctly
-    }
 
     fetch('/api/scores/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(currentPlayerScore)
-    }).then(response => {
-        if (!response.ok) console.error('Failed to save score');
-        return fetch('/api/scores');
-    }).then(response => response.json())
+    })
+    .then(response => response.ok ? fetch('/api/scores') : Promise.reject("Failed to save score"))
+    .then(response => response.json())
     .then(scores => {
-        console.log("Fetched scores:", scores); // Debugging
-        allScores = scores.sort((a, b) => b.score - a.score);
+        console.log("Fetched scores:", scores);
+        updateScoreboard(scores);
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-        const currentPlayerIndex = allScores.findIndex(entry => 
-            entry.name === playerName && 
-            entry.score === score && 
-            entry.time === elapsedTime
-        );
+// Function to update scoreboard using the existing table in index.html
+function updateScoreboard(scores) {
+    const tableBody = document.getElementById("scoreTableBody");
 
-        currentPage = currentPlayerIndex !== -1 ? Math.floor(currentPlayerIndex / scoresPerPage) + 1 : 1;
+    if (!tableBody) {
+        console.error("Score table body not found!");
+        return;
+    }
 
-        displayPage(currentPage);
-        scoreboard.style.display = "block";
-    }).catch(error => console.error('Error:', error));
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    // Sort scores in descending order
+    scores.sort((a, b) => b.score - a.score);
+
+    scores.forEach((entry, index) => {
+        const row = document.createElement("tr");
+
+        const rankCell = document.createElement("td");
+        rankCell.textContent = index + 1;
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = entry.name;
+
+        const scoreCell = document.createElement("td");
+        scoreCell.textContent = entry.score;
+
+        const timeCell = document.createElement("td");
+        timeCell.textContent = entry.time;
+
+        row.appendChild(rankCell);
+        row.appendChild(nameCell);
+        row.appendChild(scoreCell);
+        row.appendChild(timeCell);
+        tableBody.appendChild(row);
+    });
+
+    // Ensure the scoreboard remains visible
+    document.querySelector(".scoreboard").style.display = "block";
 }
