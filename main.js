@@ -632,6 +632,13 @@ function resumeGame() {
 
 // Event listeners for keydown and keyup
 document.addEventListener("keydown", (e) => {
+    const playerNameInput = document.getElementById("playerName");
+
+
+    if (document.activeElement === playerNameInput) {
+        return;
+    }
+
     if (e.key === "ArrowLeft") {
         keys.ArrowLeft = true;
     } else if (e.key === "ArrowRight") {
