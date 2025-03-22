@@ -24,8 +24,10 @@
     </div>
 
     <div class="scoreboard">
-        Game Over! Press Enter to Restart
+        Press ENTER to restart
         <h2>Scoreboard</h2>
+        <input type="text" id="scoreNameInput" placeholder="Enter your name" maxlength="20">
+        <button id="submitScoreButton">Submit Score</button>
         <table>
             <thead>
                 <tr>
@@ -35,16 +37,16 @@
                     <th>Time</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Scoreboard rows will be populated here -->
+            <tbody id="scoreTableBody">
+                <!-- Scores will be inserted here -->
             </tbody>
         </table>
     </div>
+    
 
     <div id="gameOver"></div>
     <div class="start-menu">
         <h2>Choose a Map:</h2>
-        <input type="text" id="playerName" placeholder="Enter your name" maxlength="20"><br>
         <button id="map1Button">Map 1</button>
         <button id="map2Button">Map 2</button>
         <button id="map3Button">Map 3</button>
