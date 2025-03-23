@@ -19,6 +19,7 @@ let score = 0; // Track the player's score
 let lives = 3; // Track the player's lives
 let level = 1; // Track the current level
 let enemies;
+let currentPage = 1;
 let enemyWidth = 40;
 let enemyHeight = 40;
 let enemySpeed = 1; // Initial enemy speed
@@ -373,32 +374,6 @@ function updateSidebar() {
     livesDisplay.textContent = lives;
 }
 
-// Restart the game
-// function restartGame() {
-//     isPaused = false;
-//     pauseMenu.style.display = "none";
-//     gameOverMessage.style.display = "none";
-
-//     while (gameContainer.firstChild) {
-//         gameContainer.removeChild(gameContainer.firstChild);
-//     }
-
-//     player = null;
-//     bullets = [];
-//     enemyBullets = [];
-//     gameOver = false;
-//     level = 1;
-//     score = 0;
-//     lives = 3;
-
-//     levelDisplay.textContent = level;
-//     scoreDisplay.textContent = score;
-//     livesDisplay.textContent = lives;
-
-//     initializeGame();
-//     gameLoop();
-// }
-
 // checks whether two objects are colliding
 function hasCollided(obj1, obj2) {
     return (
@@ -675,7 +650,6 @@ document.getElementById("map1Button").addEventListener("click", () => startGame(
 document.getElementById("map2Button").addEventListener("click", () => startGame(2));
 document.getElementById("map3Button").addEventListener("click", () => startGame(3));
 
-let currentPage = 1; // Moved outside to persist state
 
 function displayScoreboard() {
     const scoreboard = document.querySelector(".scoreboard");
