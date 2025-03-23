@@ -731,6 +731,10 @@ function updateScoreboard(scores) {
     const timeCell = document.createElement("td");
     timeCell.textContent = entry.time;
 
+    if (entry.name === document.getElementById("scoreNameInput").value.trim()) {
+        row.classList.add("current-player");
+    }
+
     row.appendChild(rankCell);
     row.appendChild(nameCell);
     row.appendChild(scoreCell);
