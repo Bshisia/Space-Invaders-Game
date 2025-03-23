@@ -696,25 +696,34 @@ function submitScore(playerName) {
 }
 
 // Function to update scoreboard using the existing table in index.html
+const entriesPerPage = 5;
+
 function updateScoreboard(scores) {
     const tableBody = document.getElementById("scoreTableBody");
+    const paginationContainer = document.querySelector(".pagination");
 
-    if (!tableBody) {
-        console.error("Score table body not found!");
+    if (!tableBody || !paginationContainer) {
+        console.error("Score table body or pagination container not found!");
         return;
     }
-
-    // Clear existing rows
-    tableBody.innerHTML = "";
 
     // Sort scores in descending order
     scores.sort((a, b) => b.score - a.score);
 
-    scores.forEach((entry, index) => {
+    // Calculate pagination details
+    const totalPages = Math.ceil(scores.length / entriesPerPage);
+    const startIndex = (currentPage - 1) * entriesPerPage;
+    const endIndex = startIndex + entriesPerPage;
+    const paginatedScores = scores.slice(startIndex, endIndex);
+
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    paginatedScores.forEach((entry, index) => {
         const row = document.createElement("tr");
 
         const rankCell = document.createElement("td");
-        rankCell.textContent = index + 1;
+        rankCell.textContent = startIndex + index + 1;
 
         const nameCell = document.createElement("td");
         nameCell.textContent = entry.name;
@@ -732,6 +741,27 @@ function updateScoreboard(scores) {
         tableBody.appendChild(row);
     });
 
-    // Ensure the scoreboard remains visible
+    // Update pagination buttons
+    paginationContainer.innerHTML = `
+        <button id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Previous</button>
+        <span>Page ${currentPage} of ${totalPages}</span>
+        <button id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Next</button>
+    `;
+
+    // Add event listeners for pagination buttons
+    document.getElementById("prevPage").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateScoreboard(scores);
+        }
+    });
+
+    document.getElementById("nextPage").addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateScoreboard(scores);
+        }
+    });
+
     document.querySelector(".scoreboard").style.display = "block";
 }
