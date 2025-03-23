@@ -663,16 +663,23 @@ function displayScoreboard() {
 
 // Function to submit score and update scoreboard
 function submitScore(playerName) {
-  if (!playerName.trim()) {
-    alert("Please enter a valid name!");
-    return;
-  }
+    if (!playerName.trim()) {
+        alert("Please enter a valid name!");
+        return;
+    }
 
-  const currentPlayerScore = {
-    name: playerName.trim(),
-    score: score,
-    time: elapsedTime,
-  };
+    const currentPlayerScore = {
+        name: playerName.trim(),
+        score: score,
+        time: elapsedTime
+    };
+
+    // Hide the submit section
+    const submitSection = document.getElementById('submitSection');
+    if (submitSection) {
+        submitSection.style.display = 'none';
+    }
+
 
   fetch("/api/scores/add", {
     method: "POST",
