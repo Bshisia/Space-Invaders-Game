@@ -630,15 +630,20 @@ function displayScoreboard() {
   const scoreboard = document.querySelector(".scoreboard");
   const nameInput = document.getElementById("scoreNameInput");
   const submitButton = document.getElementById("submitScoreButton");
+  const submitSection = document.getElementById('submitSection');
 
-  if (!scoreboard || !nameInput || !submitButton) {
+  if (!scoreboard || !nameInput || !submitButton || !submitSection) {
     console.error("Scoreboard elements not found!");
     return;
   }
 
   scoreboard.style.display = "block";
+  submitSection.style.display = "block";
 
-  submitButton.onclick = () => submitScore(nameInput.value);
+  submitButton.onclick = () => {
+    submitScore(nameInput.value)
+    submitSection.style.display = "none";
+  };
 }
 
 function submitScore(playerName) {
@@ -750,8 +755,8 @@ function updateScoreboard(scores) {
     scoreboard.style.display = "block";
   }
 
-  const submitButton = document.getElementById("submitScoreButton");
-  if (submitButton) {
-    submitButton.disabled = true;
-  }
+  // const submitButton = document.getElementById("submitScoreButton");
+  // if (submitButton) {
+  //   submitButton.disabled = true;
+  // }
 }

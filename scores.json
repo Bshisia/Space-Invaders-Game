@@ -73,5 +73,30 @@
         "name": "New",
         "score": 0,
         "time": 5
+    },
+    {
+        "name": "john",
+        "score": 650,
+        "time": 10
+    },
+    {
+        "name": "john",
+        "score": 1050,
+        "time": 21
+    },
+    {
+        "name": "john",
+        "score": 700,
+        "time": 8
+    },
+    {
+        "name": "john",
+        "score": 150,
+        "time": 4
+    },
+    {
+        "name": "john",
+        "score": 800,
+        "time": 16
     }
 ]
