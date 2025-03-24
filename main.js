@@ -9,25 +9,26 @@ const continueButton = document.getElementById("continueButton");
 const restartButton = document.getElementById("restartButton");
 const gameOverMessage = document.getElementById("gameOver");
 const startMenu = document.querySelector(".start-menu");
+const entriesPerPage = 5;
 
 // Game variables
 let player;
 let playerName = "";
-let score = 0; // Track the player's score
-let lives = 3; // Track the player's lives
-let level = 1; // Track the current level
+let score = 0; 
+let lives = 3; 
+let level = 1; 
 let enemies;
 let currentPage = 1;
 let enemyWidth = 40;
 let enemyHeight = 40;
-let enemySpeed = 1; // Initial enemy speed
+let enemySpeed = 1; 
 let enemyDirection = 1;
 let bullets;
 let enemyBullets;
 let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
-let enemyShootInterval = 1000; // Initial firing interval
+let enemyShootInterval = 1000;
 const initialShotCooldown = 500;
 let shotCooldown = initialShotCooldown;
 
@@ -182,7 +183,6 @@ function startGame(mapNumber) {
 
 // Initialize the game
 function initializeGame() {
-  // Clear the game container
   while (gameContainer.firstChild) {
     gameObjects;
     gameContainer.removeChild(gameContainer.firstChild);
@@ -191,8 +191,8 @@ function initializeGame() {
   // Reset game variables
   player = {
     element: document.createElement("div"),
-    x: 375, // Initial X position (centered)
-    y: 540, // Initial Y position (near the bottom)
+    x: 375, 
+    y: 540, 
     width: 40,
     height: 40,
     speed: 5,
@@ -210,17 +210,11 @@ function initializeGame() {
   score = 0;
   lives = 3;
   shotCooldown = initialShotCooldown;
-  enemySpeed = 1; // Reset enemy speed to initial value
+  enemySpeed = 1;
 
   createTileGrid();
-
-  // Initialize enemies
   initializeEnemies();
-
-  // Update the sidebar
   updateSidebar();
-
-  // Start the timer
   resetTimer();
   startTimer();
 }
@@ -305,7 +299,6 @@ function updateBullets() {
     bullet.y -= bullet.speed;
     bullet.element.style.transform = `translate(${bullet.x}px, ${bullet.y}px)`;
 
-    // Remove bullet if it goes off-screen
     if (bullet.y + bullet.height < 0) {
       bullet.element.style.visibility = "hidden";
       bullets.splice(index, 1);
@@ -317,7 +310,7 @@ function updateBullets() {
 function shootEnemyBullet(enemy) {
   const enemyBullet = document.createElement("div");
   enemyBullet.className = "bullet";
-  enemyBullet.style.backgroundColor = "yellow"; // Player bullet color
+  enemyBullet.style.backgroundColor = "yellow"; 
   enemyBullet.style.transform = `translate(${
     enemy.x + enemy.width / 2 - 2.5
   }px, ${enemy.y + enemy.height}px)`;
@@ -338,7 +331,6 @@ function updateEnemyBullets() {
     enemyBullet.y += enemyBullet.speed;
     enemyBullet.element.style.transform = `translate(${enemyBullet.x}px, ${enemyBullet.y}px)`;
 
-    // Remove bullet if it goes off-screen
     if (enemyBullet.y > 600) {
       enemyBullet.element.style.visibility = "hidden";
       enemyBullets.splice(index, 1);
@@ -387,9 +379,7 @@ function checkBulletCollisions() {
           (playerBullet.y + enemyBullet.y) / 2
         );
 
-        // playerBullet.element.remove();
         playerBullet.element.style.visibility = "hidden";
-        // enemyBullet.element.remove();
         enemyBullet.element.style.visibility = "hidden";
         bullets.splice(playerBulletIndex, 1);
         enemyBullets.splice(enemyBulletIndex, 1);
@@ -429,8 +419,8 @@ function levelUp() {
   currentenemyMap = enemyMaps[enemyMapIndex];
   currentTileMap = tileMaps[enemyMapIndex];
   enemyShootInterval = Math.max(200, enemyShootInterval - 100);
-  enemySpeed += 0.5; // Increase enemy speed
-  shotCooldown = Math.max(100, shotCooldown - 50); // Reduce player shooting cooldown
+  enemySpeed += 0.5; 
+  shotCooldown = Math.max(100, shotCooldown - 50); 
   createTileGrid();
   initializeEnemies();
   updateSidebar();
@@ -439,25 +429,20 @@ function levelUp() {
 function checkEnemyBulletCollisions() {
   enemyBullets.forEach((bullet, bulletIndex) => {
     if (hasCollided(bullet, player)) {
-      // Player hit!
       player.alive = false;
 
-      // Remove the enemy bullet
       enemyBullets.splice(bulletIndex, 1);
       bullet.element.style.visibility = "hidden";
       hitSound.play();
 
-      // Decrease lives
       lives--;
       updateSidebar();
 
-      // End game if no lives left
       if (lives === 0) {
         gameOver = true;
         player.element.style.visibility = "hidden";
         triggerExplosion(player.x, player.y);
       } else {
-        // Reset player position if lives remain
         player.alive = true;
         hitSound.play();
       }
@@ -470,7 +455,6 @@ function yieldToMain() {
     return scheduler.yield();
   }
 
-  // Fall back to yielding with setTimeout.
   return new Promise((resolve) => {
     setTimeout(resolve, 0);
   });
@@ -480,7 +464,7 @@ function gameLoop(timestamp) {
   if (gameOver) {
     stopTimer();
     gameOverSound.play();
-    displayScoreboard(); // Request player name before submitting score
+    displayScoreboard(); 
     return;
   }
 
@@ -603,7 +587,6 @@ document.addEventListener("keydown", (e) => {
   } else if (e.key === " ") {
     keys.Space = true;
   } else if (e.key === "Enter" && gameOver) {
-    // Restart the game when Enter is pressed after game over
     gameOverMessage.style.display = "none";
     startMenu.style.visibility = "visible";
   } else if (
@@ -633,7 +616,6 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-// Attach event listeners to map buttons
 document
   .getElementById("map1Button")
   .addEventListener("click", () => startGame(1));
@@ -654,14 +636,11 @@ function displayScoreboard() {
     return;
   }
 
-  // Show the scoreboard and ask for player's name
   scoreboard.style.display = "block";
 
-  // Ensure previous event listener is removed before adding a new one
   submitButton.onclick = () => submitScore(nameInput.value);
 }
 
-// Function to submit score and update scoreboard
 function submitScore(playerName) {
     if (!playerName.trim()) {
         alert("Please enter a valid name!");
@@ -674,7 +653,6 @@ function submitScore(playerName) {
         time: elapsedTime
     };
 
-    // Hide the submit section
     const submitSection = document.getElementById('submitSection');
     if (submitSection) {
         submitSection.style.display = 'none';
@@ -699,9 +677,6 @@ function submitScore(playerName) {
     .catch((error) => console.error("Error:", error));
 }
 
-// Function to update scoreboard using the existing table in index.html
-const entriesPerPage = 5;
-
 function updateScoreboard(scores) {
   const tableBody = document.getElementById("scoreTableBody");
   const paginationContainer = document.querySelector(".pagination");
@@ -711,16 +686,13 @@ function updateScoreboard(scores) {
     return;
   }
 
-  // Sort scores in descending order
   scores.sort((a, b) => b.score - a.score);
 
-  // Calculate pagination details
   const totalPages = Math.ceil(scores.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const endIndex = startIndex + entriesPerPage;
   const paginatedScores = scores.slice(startIndex, endIndex);
 
-  // Clear existing rows
   tableBody.innerHTML = "";
 
   paginatedScores.forEach((entry, index) => {
@@ -749,7 +721,6 @@ function updateScoreboard(scores) {
     tableBody.appendChild(row);
   });
 
-  // Update pagination buttons
   paginationContainer.innerHTML = `
         <button id="prevPage" ${
           currentPage === 1 ? "disabled" : ""
@@ -760,7 +731,6 @@ function updateScoreboard(scores) {
         }>Next</button>
     `;
 
-  // Add event listeners for pagination buttons
   document.getElementById("prevPage").addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
@@ -775,13 +745,11 @@ function updateScoreboard(scores) {
     }
   });
 
-  // Make sure the scoreboard is visible
   const scoreboard = document.querySelector(".scoreboard");
   if (scoreboard) {
     scoreboard.style.display = "block";
   }
 
-  // Disable the submit button to prevent multiple submissions
   const submitButton = document.getElementById("submitScoreButton");
   if (submitButton) {
     submitButton.disabled = true;
