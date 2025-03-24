@@ -1,125 +1,224 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
 body {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Orbitron', sans-serif;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #030336;
-    /* background-color: #43435a; */
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Orbitron", sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #030336;
+  /* background-color: #43435a; */
 }
 
 #gameContainer {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    overflow: hidden;
-    background-color: #181865;
+  position: relative;
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  background-color: #181865;
 }
 
 /* sidebar */
 #sidebar {
-    width: 200px;
-    height: 600px;
-    background-color: #020225;
+  width: 200px;
+  height: 600px;
+  background-color: #020225;
 
-    /* background: linear-gradient(135deg, #1e1e2f, #2a2a40); */
-    color: #fff;
-    padding: 20px;
-    box-sizing: border-box;
-    border-left: 2px solid #444;
+  /* background: linear-gradient(135deg, #1e1e2f, #2a2a40); */
+  color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-left: 2px solid #444;
 }
 
 #sidebar h2 {
-    margin: 0 0 20px 0;
-    font-size: 24px;
+  margin: 0 0 20px 0;
+  font-size: 24px;
 }
 
 #sidebar h3 {
-    padding-top: 30px;
+  padding-top: 30px;
 }
 
 /* sprites */
 .sprite {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-image: url("/images/spritesheet-x2.png");
-    background-size: cover;
-    will-change: transform;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-image: url("/images/spritesheet-x2.png");
+  background-size: cover;
+  will-change: transform;
 }
 
-.greenAlien {background-position: 0px 0px;}
-.ufo {background-position: -40px 0px;}
-.asteroid1 {background-position: -80px 0px;}
-.asteroid2 {background-position: -120px 0px;}
-.asteroid3 {background-position: -160px 0px}
-.asteroid4{background-position: -200px 0px}
-.jet1 {background-position: -240px 0px}
-.explosion {position:absolute; background-position: -280px 0px;  opacity: 0.8; animation: explode 0.5s ease-out;}
-.jet2 {background-position: -320px 0px;}
-.rocket1 {background-position: -360px 0px;}
-.rocket2 {background-position: -400px 0px;}
-
+.greenAlien {
+  background-position: 0px 0px;
+}
+.ufo {
+  background-position: -40px 0px;
+}
+.asteroid1 {
+  background-position: -80px 0px;
+}
+.asteroid2 {
+  background-position: -120px 0px;
+}
+.asteroid3 {
+  background-position: -160px 0px;
+}
+.asteroid4 {
+  background-position: -200px 0px;
+}
+.jet1 {
+  background-position: -240px 0px;
+}
+.explosion {
+  position: absolute;
+  background-position: -280px 0px;
+  opacity: 0.8;
+  animation: explode 0.5s ease-out;
+}
+.jet2 {
+  background-position: -320px 0px;
+}
+.rocket1 {
+  background-position: -360px 0px;
+}
+.rocket2 {
+  background-position: -400px 0px;
+}
 
 .bullet {
-    position: absolute; 
-    width: 5px;
-    height: 10px;
-    will-change: transform;
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  will-change: transform;
 }
 
-#gameOver, #pauseMenu {
-    display: none;
-    position: absolute;
-    transform: translate(0, 0);
-    background-color: #020225d7;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    border: 2px solid #444;
-    border-radius: 10px;
+#gameOver,
+#pauseMenu {
+  display: none;
+  position: absolute;
+  transform: translate(0, 0);
+  background-color: #020225d7;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid #444;
+  border-radius: 10px;
 }
 
 .start-menu {
-    display: block;
-    position: absolute;
-    transform: translate(0%, 0%);
-    background-color: #020225d7;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    border: 2px solid #444;
-    border-radius: 10px;
+  display: block;
+  position: absolute;
+  transform: translate(0%, 0%);
+  background-color: #020225d7;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid #444;
+  border-radius: 10px;
 }
 
-#pauseMenu button, .start-menu button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-family: 'Orbitron';
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #0b9812d4;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+#pauseMenu button,
+.start-menu button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-family: "Orbitron";
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #0b9812d4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+#pauseMenu button:hover {
+  background: linear-gradient(135deg, #666, #888);
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0);
+    opacity: 1;
   }
 
-  #pauseMenu button:hover {
-    background: linear-gradient(135deg, #666, #888);
+  100% {
+    transform: scale(2);
+    opacity: 0;
   }
+}
 
-  @keyframes explode {
-    0% {
-      transform: scale(0);
-      opacity: 1;
-    }
+/* Add these styles to your style.css file */
+.scoreboard {
+  display: none;
+  position: absolute;
+  transform: translate(0, 0);
+  background-color: #020225d7;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid #444;
+  border-radius: 10px;
+}
 
-    100% {
-      transform: scale(2);
-      opacity: 0;
-    }
-  }
+.scoreboard table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.scoreboard th,
+.scoreboard td {
+  padding: 8px;
+  border: 1px solid #444;
+}
+
+.scoreboard th {
+  background-color: #333;
+}
+
+.scoreboard .current-score {
+  background-color: rgba(0, 128, 0, 0.3);
+  font-weight: bold;
+}
+
+h1 {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #020225d7;
+  color: #fff;
+  border-bottom: 2px solid #444;
+  z-index: 10;
+}
+
+.current-player {
+  background-color: rgba(255, 255, 0, 0.2);
+  font-weight: bold;
+}
+
+.pagination {
+  margin-top: 15px; /* Adds space between the table and pagination */
+  text-align: center; /* Centers the pagination buttons */
+}
+
+.pagination button {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #0b9812d4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #555; /* Grey out disabled buttons */
+  cursor: not-allowed;
+}
