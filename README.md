@@ -1,13 +1,4 @@
-
-zonejohnp
-i want to update my readme to reflect the changes of my program regarding the score handling
-
-
-Gemini
-Okay, I understand. You want to update the README.md file to accurately describe the score handling and scoreboard features in your Space Invaders game. Here's an updated version of your README.md, incorporating those changes, along with explanations of what's been modified:
-
- markdown 
-# Space Invaders Different Maps
+# Space Invaders Score Handling
 
 This is a simple Space Invaders-style game implemented in JavaScript. Players control a spaceship to defend against waves of alien invaders.
 
