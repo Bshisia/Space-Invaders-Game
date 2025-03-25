@@ -9,6 +9,7 @@ import (
 )
 
 type Score struct {
+	Index int `json:"index"`
 	Name  string `json:"name"`
 	Score int    `json:"score"`
 	Time  int    `json:"time"`
@@ -61,6 +62,7 @@ func addScore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	newScore.Index = len(scores) + 1
 
 	scores = append(scores, newScore)
 	saveScores()
