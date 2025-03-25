@@ -527,7 +527,6 @@ function updateEnemies() {
     if (enemy.alive) {
       enemy.element.style.transform = `translate(${enemy.x}px,${enemy.y}px)`;
     }
-    console.log(enemy.element);
   });
 }
 
@@ -676,7 +675,6 @@ function submitScore(playerName) {
     )
     .then((response) => response.json())
     .then((scores) => {
-      console.log("Fetched scores:", scores);
       updateScoreboard(scores);
     })
     .catch((error) => console.error("Error:", error));
@@ -715,7 +713,7 @@ function updateScoreboard(scores) {
     const timeCell = document.createElement("td");
     timeCell.textContent = entry.time;
 
-    if (entry.name === document.getElementById("scoreNameInput").value.trim()) {
+    if (entry.index === scores.length) {
         row.classList.add("current-player");
     }
 
@@ -754,9 +752,4 @@ function updateScoreboard(scores) {
   if (scoreboard) {
     scoreboard.style.display = "block";
   }
-
-  // const submitButton = document.getElementById("submitScoreButton");
-  // if (submitButton) {
-  //   submitButton.disabled = true;
-  // }
 }
