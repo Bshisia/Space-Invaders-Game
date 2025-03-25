@@ -1,102 +1,26 @@
 [
     {
+        "index": 1,
         "name": "Mosses",
         "score": 500,
         "time": 9
     },
     {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "Mosses",
-        "score": 500,
-        "time": 9
-    },
-    {
-        "name": "James",
-        "score": 100,
-        "time": 8
-    },
-    {
-        "name": "John",
-        "score": 50,
+        "index": 2,
+        "name": "pope",
+        "score": 200,
         "time": 6
     },
     {
-        "name": "Peter",
-        "score": 50,
-        "time": 6
+        "index": 3,
+        "name": "pope",
+        "score": 550,
+        "time": 9
     },
     {
-        "name": "Peter",
-        "score": 500,
-        "time": 12
-    },
-    {
-        "name": "James",
-        "score": 900,
-        "time": 14
-    },
-    {
-        "name": "Veeh",
-        "score": 1100,
-        "time": 27
-    },
-    {
-        "name": "New",
+        "index": 4,
+        "name": "pope",
         "score": 0,
-        "time": 5
-    },
-    {
-        "name": "john",
-        "score": 650,
-        "time": 10
-    },
-    {
-        "name": "john",
-        "score": 1050,
-        "time": 21
-    },
-    {
-        "name": "john",
-        "score": 700,
-        "time": 8
-    },
-    {
-        "name": "john",
-        "score": 150,
         "time": 4
-    },
-    {
-        "name": "john",
-        "score": 800,
-        "time": 16
     }
 ]
