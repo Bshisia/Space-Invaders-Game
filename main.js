@@ -14,14 +14,14 @@ const entriesPerPage = 5;
 // Game variables
 let player;
 let playerName = "";
-let score = 0; 
-let lives = 3; 
-let level = 1; 
+let score = 0;
+let lives = 3;
+let level = 1;
 let enemies;
 let currentPage = 1;
 let enemyWidth = 40;
 let enemyHeight = 40;
-let enemySpeed = 1; 
+let enemySpeed = 1;
 let enemyDirection = 1;
 let bullets;
 let enemyBullets;
@@ -31,6 +31,137 @@ let lastEnemyShootTime = 0;
 let enemyShootInterval = 1000;
 const initialShotCooldown = 500;
 let shotCooldown = initialShotCooldown;
+
+// Story variable states
+let storyPhase = 0;
+const STORY_TRIGGERS = {
+  INTRODUCTION: 0,
+  MID_STORY: 500,
+  VICTORY: 2000,
+  DEFEAT: -1,
+}
+
+document.getElementById("startGame").addEventListener("click", () => {
+  document.getElementById("introScreen").style.display = "none";
+  isPaused = false;
+  gameLoop();
+});
+
+document.querySelectorAll(".continueGame").forEach(button => {
+  button.addEventListener("click", () => {
+    document.getElementById("midStoryScreen").style.display = "none";
+    isPaused = false;
+    gameLoop();
+  });
+});
+
+document.getElementById("victoryOkButton").addEventListener("click", () => {
+  document.getElementById("victoryScreen").style.display = "none";
+  displayScoreEntry();
+});
+
+document.getElementById("defeatOkButton").addEventListener("click", () => {
+  document.getElementById("defeatScreen").style.display = "none";
+  displayScoreEntry();
+});
+
+function displayScoreEntry() {
+  const scoreboard = document.querySelector(".scoreboard");
+  const submitSection = document.getElementById("submitSection");
+  const scoreTableBody = document.getElementById("scoreTableBody");
+
+  hideAllOverlays();
+
+  // Reset UI
+  scoreboard.style.display = "block";
+  scoreTableBody.innerHTML = "";
+  submitSection.style.display = "block";
+
+  const nameInput = document.getElementById("scoreNameInput");
+  const submitButton = document.getElementById("submitScoreButton");
+
+  nameInput.value = "";
+  nameInput.focus();
+
+  submitButton.onclick = () => {
+    submitScore(nameInput.value);
+    submitSection.style.display = "none";
+  };
+
+  // Allow ENTER to submit too
+  nameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitScore(nameInput.value);
+      submitSection.style.display = "none";
+    }
+  });
+}
+
+// document.querySelectorAll(".restartStory").forEach(button => {
+//   button.addEventListener("click", restartGame);
+// });
+
+function hideAllOverlays() {
+  const overlays = [
+    ".scoreboard",
+    "#introScreen",
+    "#midStoryScreen",
+    "#victoryScreen",
+    "#defeatScreen",
+    "#gameOver",
+    "#pauseMenu"
+  ];
+
+  overlays.forEach(selector => {
+    const el = document.querySelector(selector);
+    if (el) el.style.display = "none";
+  });
+}
+
+function showIntroduction() {
+  isPaused = true;
+  document.getElementById("introScreen").style.display = "block";
+  stopTimer();
+}
+
+function showMidStory() {
+  isPaused = true;
+  pauseMenu.style.display = "none";
+  document.getElementById("midStoryScreen").style.display = "block";
+  stopTimer();
+}
+
+function showConclusion() {
+  stopTimer();
+  gameOverSound.play();
+  
+  hideAllOverlays();
+
+  if (lives <= 0) {
+      document.getElementById("defeatScreen").style.display = "block";
+      // gameOverMessage.style.display = "none";
+  } else if (level > 10) { // Victory after completing 10 levels
+      document.getElementById("victoryScreen").style.display = "block";
+      // gameOverMessage.style.display = "none";
+  // } else {
+  //     gameOverMessage.style.display = "block";
+  }
+  // gameOverSound.play();
+}
+
+function restartGame() {
+  document.getElementById("introScreen").style.display = "none";
+  document.getElementById("victoryScreen").style.display = "none";
+  document.getElementById("defeatScreen").style.display = "none";
+  document.getElementById("midStoryScreen").style.display = "none";
+
+  storyPhase = 0;
+  isPaused = false;
+  hideAllOverlays();
+  resetTimer();
+  initializeGame();
+  gameLoop();
+}
 
 // Track key states
 const keys = {
@@ -175,9 +306,15 @@ function startGame(mapNumber) {
 
   const scoreboard = document.querySelector(".scoreboard");
   scoreboard.style.display = "none";
+  
+
+  // Show Intro Screen
+  showIntroduction()
+
   // Start the game
   initializeGame();
   startMenu.style.visibility = "hidden";
+
   gameLoop();
 }
 
@@ -191,8 +328,8 @@ function initializeGame() {
   // Reset game variables
   player = {
     element: document.createElement("div"),
-    x: 375, 
-    y: 540, 
+    x: 375,
+    y: 540,
     width: 40,
     height: 40,
     speed: 5,
@@ -241,7 +378,7 @@ function initializeEnemies() {
         enemy.className = "sprite " + currentGameObjects[1];
         enemy.style.transform = `translate(${col * (enemyWidth + 10)}px, ${
           row * (enemyHeight + 10)
-        }px)`;
+          }px)`;
 
         gameContainer.appendChild(enemy);
         enemies.push({
@@ -275,9 +412,8 @@ function playerShoot(timestamp) {
     const bullet = document.createElement("div");
     bullet.className = "bullet";
     bullet.style.backgroundColor = "red"; // Player bullet color
-    bullet.style.transform = `translate(${
-      player.x + player.width / 2 - 2.5
-    }px, ${player.y - 10}px)`;
+    bullet.style.transform = `translate(${player.x + player.width / 2 - 2.5
+      }px, ${player.y - 10}px)`;
     gameContainer.appendChild(bullet);
 
     bullets.push({
@@ -310,10 +446,9 @@ function updateBullets() {
 function shootEnemyBullet(enemy) {
   const enemyBullet = document.createElement("div");
   enemyBullet.className = "bullet";
-  enemyBullet.style.backgroundColor = "yellow"; 
-  enemyBullet.style.transform = `translate(${
-    enemy.x + enemy.width / 2 - 2.5
-  }px, ${enemy.y + enemy.height}px)`;
+  enemyBullet.style.backgroundColor = "yellow";
+  enemyBullet.style.transform = `translate(${enemy.x + enemy.width / 2 - 2.5
+    }px, ${enemy.y + enemy.height}px)`;
   gameContainer.appendChild(enemyBullet);
   enemyBullets.push({
     element: enemyBullet,
@@ -412,15 +547,23 @@ function checkPlayerBulletCollisions() {
 // Level up
 function levelUp() {
   level++;
+  if (level > 10) { // Victory after 10 levels
+    gameOver = true;
+    document.getElementById("victoryScreen").style.display = "block";
+    return;
+  }
+
   enemyMapIndex++;
   if (enemyMapIndex === enemyMaps.length) {
     enemyMapIndex = 0;
   }
   currentenemyMap = enemyMaps[enemyMapIndex];
   currentTileMap = tileMaps[enemyMapIndex];
+
   enemyShootInterval = Math.max(200, enemyShootInterval - 100);
-  enemySpeed += 0.5; 
-  shotCooldown = Math.max(100, shotCooldown - 50); 
+  enemySpeed += 0.5;
+  shotCooldown = Math.max(100, shotCooldown - 50);
+
   createTileGrid();
   initializeEnemies();
   updateSidebar();
@@ -462,14 +605,22 @@ function yieldToMain() {
 
 function gameLoop(timestamp) {
   if (gameOver) {
+    showConclusion();
     stopTimer();
     gameOverSound.play();
-    displayScoreboard(); 
+    displayScoreboard();
     return;
   }
 
   if (isPaused) {
     return;
+  }
+
+  // Story progression check
+  if (score >= STORY_TRIGGERS.MID_STORY && storyPhase === 0) {
+    showMidStory();
+    storyPhase = 1;
+    return; // Pause game loop until user continues
   }
 
   movePlayer();
@@ -646,21 +797,21 @@ function displayScoreboard() {
 }
 
 function submitScore(playerName) {
-    if (!playerName.trim()) {
-        alert("Please enter a valid name!");
-        return;
-    }
+  if (!playerName.trim()) {
+    alert("Please enter a valid name!");
+    return;
+  }
 
-    const currentPlayerScore = {
-        name: playerName.trim(),
-        score: score,
-        time: elapsedTime
-    };
+  const currentPlayerScore = {
+    name: playerName.trim(),
+    score: score,
+    time: elapsedTime
+  };
 
-    const submitSection = document.getElementById('submitSection');
-    if (submitSection) {
-        submitSection.style.display = 'none';
-    }
+  const submitSection = document.getElementById('submitSection');
+  if (submitSection) {
+    submitSection.style.display = 'none';
+  }
 
 
   fetch("/api/scores/add", {
@@ -714,7 +865,7 @@ function updateScoreboard(scores) {
     timeCell.textContent = entry.time;
 
     if (entry.index === scores.length) {
-        row.classList.add("current-player");
+      row.classList.add("current-player");
     }
 
     row.appendChild(rankCell);
@@ -725,13 +876,11 @@ function updateScoreboard(scores) {
   });
 
   paginationContainer.innerHTML = `
-        <button id="prevPage" ${
-          currentPage === 1 ? "disabled" : ""
-        }>Previous</button>
+        <button id="prevPage" ${currentPage === 1 ? "disabled" : ""
+    }>Previous</button>
         <span>Page ${currentPage} of ${totalPages}</span>
-        <button id="nextPage" ${
-          currentPage === totalPages ? "disabled" : ""
-        }>Next</button>
+        <button id="nextPage" ${currentPage === totalPages ? "disabled" : ""
+    }>Next</button>
     `;
 
   document.getElementById("prevPage").addEventListener("click", () => {
@@ -751,5 +900,24 @@ function updateScoreboard(scores) {
   const scoreboard = document.querySelector(".scoreboard");
   if (scoreboard) {
     scoreboard.style.display = "block";
+  }
+  
+  // Remove old listener to prevent duplication
+  if (restartListenerAttached) {
+    document.removeEventListener("keydown", handleRestartAfterScoreboard);
+    restartListenerAttached = false;
+  }
+
+  document.addEventListener("keydown", handleRestartAfterScoreboard);
+  let restartListenerAttached = true;
+}
+
+// Helper function to avoid duplicate listeners
+
+function handleRestartAfterScoreboard(e) {
+  if (e.key === "Enter") {
+    restartGame();
+    document.removeEventListener("keydown", handleRestartAfterScoreboard);
+    restartListenerAttached = false;
   }
 }
