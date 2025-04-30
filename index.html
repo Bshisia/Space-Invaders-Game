@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Invaders</title>
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
     <h1>Welcome to Space Invaders</h1>
     <div id="gameContainer"></div>
@@ -45,7 +47,39 @@
         </table>
         <div class="pagination"></div>
     </div>
-    
+
+    <!-- Story Screens -->
+    <div id="introScreen" class="story-screen">
+        <h1>Galactic Defense</h1>
+        <p>Earth's last defense system is under attack!<br>
+            Alien forces led by Queen Xy'rath have breached the orbital shield.<br>
+            Pilot the final starfighter to protect humanity's last hope.</p>
+        <button id="startGame">Begin Mission</button>
+    </div>
+
+    <div id="midStoryScreen" class="story-screen">
+        <h1>Reinforcements Incoming!</h1>
+        <p>You've damaged the alien mothership!<br>
+            Our scanners detect enemy reinforcements warping in.<br>
+            Hold position until the planetary cannon charges...</p>
+        <button class="continueGame">Continue Fight</button>
+    </div>
+
+    <div id="victoryScreen" class="story-screen">
+        <h1>Victory!</h1>
+        <p>Against all odds, you've repelled the invasion!<br>
+            Queen Xy'rath's fleet retreats into the nebula.<br>
+            Earth is safe... for now.</p>
+        <button class="restartStory" id="victoryOkButton">OK</button>
+    </div>
+
+    <div id="defeatScreen" class="story-screen">
+        <h1>Last Light Extinguished</h1>
+        <p>The orbital defense grid has fallen...<br>
+            Alien ships begin atmospheric bombardment.<br>
+            All hope is lost.</p>
+        <button class="restartStory" id="defeatOkButton">OK</button>
+    </div>
 
     <div id="gameOver"></div>
     <div class="start-menu">
@@ -62,9 +96,10 @@
         <button id="restartButton">Restart</button>
     </div>
     <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
-    <audio id="shootSound" src="sounds/shoot.mp3"></audio>  
+    <audio id="shootSound" src="sounds/shoot.mp3"></audio>
     <audio id="gameOverSound" src="/sounds/gameover.mp3"></audio>
-    <audio id="hitSound" src="/sounds/hit.mp3"></audio>   
+    <audio id="hitSound" src="/sounds/hit.mp3"></audio>
     <script src="main.js"></script>
 </body>
+
 </html>
