@@ -810,14 +810,13 @@ function submitScore(playerName) {
   const currentPlayerScore = {
     name: playerName.trim(),
     score: score,
-    time: elapsedTime
+    time: elapsedTime,
   };
 
-  const submitSection = document.getElementById('submitSection');
+  const submitSection = document.getElementById("submitSection");
   if (submitSection) {
-    submitSection.style.display = 'none';
+    submitSection.style.display = "none";
   }
-
 
   fetch("/api/scores/add", {
     method: "POST",
@@ -831,6 +830,21 @@ function submitScore(playerName) {
     )
     .then((response) => response.json())
     .then((scores) => {
+      // Sort scores in descending order
+      scores.sort((a, b) => b.score - a.score);
+
+      // Find the index of the current player's score
+      const playerIndex = scores.findIndex(
+        (entry) =>
+          entry.name === currentPlayerScore.name &&
+          entry.score === currentPlayerScore.score &&
+          entry.time === currentPlayerScore.time
+      );
+
+      // Calculate the page number where the player's score is located
+      currentPage = Math.floor(playerIndex / entriesPerPage) + 1;
+
+      // Update the scoreboard to show the correct page
       updateScoreboard(scores);
     })
     .catch((error) => console.error("Error:", error));
