@@ -625,7 +625,7 @@ function gameLoop(timestamp) {
   if (score >= STORY_TRIGGERS.MID_STORY && storyPhase === 0) {
     showMidStory();
     storyPhase = 1;
-    return; // Pause game loop until user continues
+    return;
   }
 
   movePlayer();
@@ -830,10 +830,8 @@ function submitScore(playerName) {
     )
     .then((response) => response.json())
     .then((scores) => {
-      // Sort scores in descending order
       scores.sort((a, b) => b.score - a.score);
 
-      // Find the index of the current player's score
       const playerIndex = scores.findIndex(
         (entry) =>
           entry.name === currentPlayerScore.name &&
@@ -841,10 +839,8 @@ function submitScore(playerName) {
           entry.time === currentPlayerScore.time
       );
 
-      // Calculate the page number where the player's score is located
       currentPage = Math.floor(playerIndex / entriesPerPage) + 1;
 
-      // Update the scoreboard to show the correct page
       updateScoreboard(scores);
     })
     .catch((error) => console.error("Error:", error));
@@ -931,16 +927,12 @@ function updateScoreboard(scores) {
 }
 
 // Helper function to avoid duplicate listeners
-
 function handleRestartAfterScoreboard(e) {
   if (e.key === "Enter") {
-    // Hide all overlays before restarting
     hideAllOverlays()
 
-    // Restart game
     restartGame();
 
-    // Remove the listener to prevent multiple calls
     document.removeEventListener("keydown", handleRestartAfterScoreboard);
     restartListenerAttached = false;
   }
