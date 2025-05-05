@@ -29,14 +29,18 @@ let gameOver = false;
 let lastShotTime = 0;
 let lastEnemyShootTime = 0;
 let enemyShootInterval = 1000;
-const initialShotCooldown = 500;
-let shotCooldown = initialShotCooldown;
+const INITIAL_ENEMY_SPEED = 1;
+const INITIAL_SHOOT_INTERVAL = 1000;
+const INITIAL_PLAYER_SHOT_COOLDOWN = 500;
+
+let shotCooldown = INITIAL_PLAYER_SHOT_COOLDOWN;
+let restartListenerAttached = true;
 
 // Story variable states
 let storyPhase = 0;
 const STORY_TRIGGERS = {
   INTRODUCTION: 0,
-  MID_STORY: 500,
+  MID_STORY: 6000,
   VICTORY: 2000,
   DEFEAT: -1,
 }
@@ -44,6 +48,9 @@ const STORY_TRIGGERS = {
 document.getElementById("startGame").addEventListener("click", () => {
   document.getElementById("introScreen").style.display = "none";
   isPaused = false;
+  
+  resetTimer();
+  startTimer();
   gameLoop();
 });
 
@@ -51,6 +58,8 @@ document.querySelectorAll(".continueGame").forEach(button => {
   button.addEventListener("click", () => {
     document.getElementById("midStoryScreen").style.display = "none";
     isPaused = false;
+
+    startTimer();
     gameLoop();
   });
 });
@@ -134,7 +143,6 @@ function showMidStory() {
 function showConclusion() {
   stopTimer();
   gameOverSound.play();
-  
   hideAllOverlays();
 
   if (lives <= 0) {
@@ -154,11 +162,11 @@ function restartGame() {
   document.getElementById("victoryScreen").style.display = "none";
   document.getElementById("defeatScreen").style.display = "none";
   document.getElementById("midStoryScreen").style.display = "none";
-
+  
   storyPhase = 0;
-  isPaused = false;
-  hideAllOverlays();
+  isPaused = true;
   resetTimer();
+  startMenu.style.visibility = "visible";
   initializeGame();
   gameLoop();
 }
@@ -307,21 +315,17 @@ function startGame(mapNumber) {
   const scoreboard = document.querySelector(".scoreboard");
   scoreboard.style.display = "none";
   
-
-  // Show Intro Screen
-  showIntroduction()
-
   // Start the game
   initializeGame();
   startMenu.style.visibility = "hidden";
 
-  gameLoop();
+  // Show Intro Screen
+  showIntroduction()
 }
 
 // Initialize the game
 function initializeGame() {
   while (gameContainer.firstChild) {
-    gameObjects;
     gameContainer.removeChild(gameContainer.firstChild);
   }
 
@@ -335,6 +339,7 @@ function initializeGame() {
     speed: 5,
     alive: true,
   };
+
   player.element.className = "sprite " + currentGameObjects[3];
   player.element.style.transform = `translate(${player.x}px, ${player.y}px)`;
   gameContainer.appendChild(player.element);
@@ -342,18 +347,19 @@ function initializeGame() {
   bullets = [];
   enemyBullets = [];
   enemies = [];
+
   gameOver = false;
   level = 1;
   score = 0;
   lives = 3;
-  shotCooldown = initialShotCooldown;
-  enemySpeed = 1;
+  shotCooldown = INITIAL_PLAYER_SHOT_COOLDOWN;
+  enemyShootInterval = INITIAL_SHOOT_INTERVAL;
+  enemySpeed = INITIAL_ENEMY_SPEED;
 
   createTileGrid();
   initializeEnemies();
   updateSidebar();
   resetTimer();
-  startTimer();
 }
 
 function createTileGrid() {
@@ -605,10 +611,9 @@ function yieldToMain() {
 
 function gameLoop(timestamp) {
   if (gameOver) {
-    showConclusion();
     stopTimer();
     gameOverSound.play();
-    displayScoreboard();
+    showConclusion();
     return;
   }
 
@@ -909,14 +914,19 @@ function updateScoreboard(scores) {
   }
 
   document.addEventListener("keydown", handleRestartAfterScoreboard);
-  let restartListenerAttached = true;
 }
 
 // Helper function to avoid duplicate listeners
 
 function handleRestartAfterScoreboard(e) {
   if (e.key === "Enter") {
+    // Hide all overlays before restarting
+    hideAllOverlays()
+
+    // Restart game
     restartGame();
+
+    // Remove the listener to prevent multiple calls
     document.removeEventListener("keydown", handleRestartAfterScoreboard);
     restartListenerAttached = false;
   }
